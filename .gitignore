@@ -1,0 +1,25 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+build/
+dist/
+.mypy_cache/
+.ruff_cache/
+.pytest_cache/
+.hypothesis/
+.coverage
+htmlcov/
+
+# Data / local state
+*.duckdb
+*.duckdb.wal
+exports/
+.env
+
+# Editors / OS
+.idea/
+.vscode/
+.DS_Store

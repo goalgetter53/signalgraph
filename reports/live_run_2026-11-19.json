@@ -1,0 +1,49 @@
+{
+  "note": "Summary of the live run performed on 2026-11-19 ~07:52 UTC from this sandbox. Counts only; raw data not committed.",
+  "connectors_run_live": [
+    "edgar:form_d (lookback 3 days, max 25 filings)",
+    "greenhouse:stripe"
+  ],
+  "connectors_not_run_live": {
+    "github": "org events endpoint blocked by the sandbox egress proxy",
+    "lever/ashby/rss": "not attempted; fixture-tested only"
+  },
+  "ingest_run_1": {
+    "inserted": 809,
+    "greenhouse_stripe_postings": 784,
+    "edgar_form_d_filings": 25,
+    "wall_s": 19.9,
+    "transient_errors_retried": 1
+  },
+  "ingest_run_2": {
+    "inserted": 0,
+    "wall_s": 8.8
+  },
+  "edgar_breakdown": {
+    "form_d": 17,
+    "form_d_fund": 8
+  },
+  "edgar_median_amount_usd_operating": 1600000.0,
+  "greenhouse_role_families": {
+    "gtm": 267,
+    "eng": 195,
+    "other": 110,
+    "ops": 70,
+    "product": 56,
+    "data": 51,
+    "security": 20,
+    "leadership": 15
+  },
+  "resolution": {
+    "mentions": 26,
+    "accounts_before_number_feature": 20,
+    "accounts_after_number_feature": 26,
+    "finding": "All 18 candidate pairs that blocking produced in this batch were between numbered series vehicles from two sponsors ('<Sponsor> Partners 16/18/19 LLC' and '<Sponsor> Ventures I..VI - Series ...'), so every one of the 6 merges in the first run was a false merge. Added the number_mismatch feature + synthetic series hard negatives + 6 gold records; re-resolving the same 26 mentions gave 26 accounts."
+  },
+  "scoring": {
+    "accounts": 26,
+    "icp_fit": 17,
+    "stripe_hiring_points_capped_at": 30.0,
+    "stripe_score": 52.76
+  }
+}

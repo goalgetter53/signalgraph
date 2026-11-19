@@ -1,0 +1,46 @@
+{
+  "jobs": [
+    {
+      "absolute_url": "https://halcyonbio.com/careers?gh_jid=7300001",
+      "id": 7300001,
+      "title": "Director, Business Development",
+      "updated_at": "2026-11-09T09:00:00-05:00",
+      "first_published": "2026-11-09T09:00:00-05:00",
+      "company_name": "Halcyon Biosciences",
+      "location": {
+        "name": "Cambridge, MA"
+      },
+      "metadata": null,
+      "requisition_id": "7300001"
+    },
+    {
+      "absolute_url": "https://halcyonbio.com/careers?gh_jid=7300002",
+      "id": 7300002,
+      "title": "Senior Data Scientist, Computational Biology",
+      "updated_at": "2026-11-04T09:00:00-05:00",
+      "first_published": "2026-11-04T09:00:00-05:00",
+      "company_name": "Halcyon Biosciences",
+      "location": {
+        "name": "Cambridge, MA"
+      },
+      "metadata": null,
+      "requisition_id": "7300002"
+    },
+    {
+      "absolute_url": "https://halcyonbio.com/careers?gh_jid=7300003",
+      "id": 7300003,
+      "title": "Head of Security",
+      "updated_at": "2026-10-28T09:00:00-05:00",
+      "first_published": "2026-10-28T09:00:00-05:00",
+      "company_name": "Halcyon Biosciences",
+      "location": {
+        "name": "Cambridge, MA"
+      },
+      "metadata": null,
+      "requisition_id": "7300003"
+    }
+  ],
+  "meta": {
+    "total": 3
+  }
+}

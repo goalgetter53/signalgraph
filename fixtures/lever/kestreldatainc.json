@@ -1,0 +1,28 @@
+[
+  {
+    "id": "a1b2c3d4-0001",
+    "text": "Account Executive",
+    "categories": {
+      "team": "Sales",
+      "department": "Go To Market",
+      "location": "New York, NY",
+      "commitment": "Full-time"
+    },
+    "createdAt": 1794312000000,
+    "hostedUrl": "https://jobs.lever.co/kestreldatainc/a1b2c3d4-0001",
+    "country": "US"
+  },
+  {
+    "id": "a1b2c3d4-0002",
+    "text": "Solutions Engineer",
+    "categories": {
+      "team": "Sales",
+      "department": "Go To Market",
+      "location": "New York, NY",
+      "commitment": "Full-time"
+    },
+    "createdAt": 1794052800000,
+    "hostedUrl": "https://jobs.lever.co/kestreldatainc/a1b2c3d4-0002",
+    "country": "US"
+  }
+]

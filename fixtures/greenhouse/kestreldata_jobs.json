@@ -1,0 +1,33 @@
+{
+  "jobs": [
+    {
+      "absolute_url": "https://boards.greenhouse.io/kestreldata/jobs/7200001",
+      "id": 7200001,
+      "title": "Data Engineer",
+      "updated_at": "2026-11-08T10:00:00+05:30",
+      "first_published": "2026-11-08T10:00:00+05:30",
+      "company_name": "Kestrel Data Systems Pvt. Ltd.",
+      "location": {
+        "name": "Pune, India"
+      },
+      "metadata": null,
+      "requisition_id": "7200001"
+    },
+    {
+      "absolute_url": "https://boards.greenhouse.io/kestreldata/jobs/7200002",
+      "id": 7200002,
+      "title": "Machine Learning Engineer",
+      "updated_at": "2026-11-02T10:00:00+05:30",
+      "first_published": "2026-11-02T10:00:00+05:30",
+      "company_name": "Kestrel Data Systems Pvt. Ltd.",
+      "location": {
+        "name": "Bengaluru, India"
+      },
+      "metadata": null,
+      "requisition_id": "7200002"
+    }
+  ],
+  "meta": {
+    "total": 2
+  }
+}

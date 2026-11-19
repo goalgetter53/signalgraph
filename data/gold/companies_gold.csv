@@ -1,0 +1,174 @@
+record_id,entity_id,name,domain,country,aliases,source,note
+r001,G001,"Northwind Robotics, Inc.",northwindrobotics.com,US,,greenhouse,base record
+r002,G001,NORTHWIND ROBOTICS INC,,US,,edgar,uppercase legal name; no domain (Form D)
+r003,G001,Northwind Robotics Incorporated,https://www.northwindrobotics.com/careers,,,lever,"Incorporated vs Inc; URL noise"
+r004,G001,Northwind Robotcs,,USA,,rss,typo; country spelled differently
+r005,G002,Northwind Analytics LLC,,US,,edgar,hard negative: shares brand token with G001
+r006,G002,Northwind Analytics,northwindanalytics.io,,,ashby,
+r007,G002,northwind analytics,,United States,,github,lowercase
+r008,G003,Northwind Robotics GmbH,northwindrobotics.de,DE,,greenhouse,subsidiary with own ccTLD domain = separate account
+r009,G003,Northwind Robotics Deutschland GmbH,https://northwindrobotics.de/jobs,Germany,,lever,subsidiary
+r010,G004,"Zentro Inc. (f/k/a Acornfield Labs, Inc.)",,US,,edgar,rebrand expressed inline
+r011,G004,Zentro,zentro.ai,US,,ashby,new name
+r012,G004,Acornfield Labs,zentro.ai,,,greenhouse,old name on new domain
+r013,G004,Zentro AI,https://zentro.ai/about,,,rss,
+r014,G004,"Zentro, Inc.",,US,Acornfield Labs,edgar,rebrand via previous-name list
+r015,G004,Acornfield Labs Inc,,US,,rss,old name only
+r016,G005,Bluepeak Health,bluepeakhealth.com,US,,greenhouse,
+r017,G005,Blue Peak Health Inc,,US,,edgar,split brand token
+r018,G005,"BluePeak Health, Inc.",www.bluepeakhealth.com,,,lever,camel case
+r019,G006,Bluepeak Capital Partners LP,,US,,edgar,hard negative: same brand different business
+r020,G006,Bluepeak Capital,bluepeakcap.com,US,,rss,
+r021,G007,Café Lumière SAS,,FR,,rss,accents + legal form
+r022,G007,Cafe Lumiere,cafelumiere.fr,France,,greenhouse,accents stripped
+r023,G007,CAFÉ LUMIÈRE,https://www.cafelumiere.fr,,,lever,
+r024,G007,Cafe Lumiere S.A.S.,,FR,,edgar,dotted legal form
+r025,G008,Müller & Söhne Präzision GmbH,,DE,,rss,umlauts and ampersand
+r026,G008,Muller & Sohne Prazision GmbH,,Germany,,edgar,umlauts dropped
+r027,G008,Mueller & Soehne Praezision GmbH,mueller-praezision.de,DE,,greenhouse,umlauts transliterated (ue/oe/ae)
+r028,G008,Müller and Söhne Präzision,https://mueller-praezision.de/karriere,,,lever,
+r029,G009,Kestrel Data Systems Private Limited,kestreldata.in,IN,,greenhouse,Indian legal form
+r030,G009,Kestrel Data Systems Pvt. Ltd.,,India,,rss,
+r031,G009,KESTREL DATA SYSTEMS PVT LTD,kestreldata.in,,,lever,
+r032,G010,"Kestrel Data, Inc.",kestreldata.com,US,,ashby,hard negative: name contained in G009 but different company/domain
+r033,G010,Kestrel Data,,US,,edgar,
+r034,G011,Helio & Co Ltd,,GB,,edgar,"""Co"" is a legal token"
+r035,G011,Helio and Co,helioandco.com,UK,,greenhouse,
+r036,G011,Helio & Company Limited,helioandco.com,,,lever,
+r037,G012,Orbitly,orbitly.io,US,,ashby,
+r038,G012,Orbitly.io,,,,rss,domain used as company name
+r039,G012,"ORBITLY, INC.",hr@orbitly.io,US,,edgar,email address as domain
+r040,G013,Quanta Freight Ltd.,,CA,,edgar,
+r041,G013,QuantaFreight,quantafreight.com,Canada,,greenhouse,squashed name
+r042,G013,Quanta Freight Logistics,quantafreight.com,,,lever,extra descriptor
+r043,G013,Quanta Freight,,CA,,rss,
+r044,G014,Quantum Freight Ltd,,GB,,edgar,hard negative: one-word near-duplicate of G013
+r045,G014,Quantum Freight,quantumfreight.co.uk,UK,,greenhouse,
+r046,G015,Lattice Bloom,https://latticebloom.github.io/,,,github,PSL private suffix keeps tenant domain
+r047,G015,Lattice Bloom,,US,,rss,
+r048,G015,Lattice Bloom Labs,latticebloom.github.io,US,,ashby,
+r049,G016,Pine Hollow Software,pinehollow.github.io,US,,github,shares github.io but different company
+r050,G016,Pine Hollow,,US,,rss,
+r051,G017,Tessellate Studio,founders.tessellate@gmail.com,US,,rss,free-mail domain must not identify
+r052,G017,Tessellate Studio LLC,,US,,edgar,
+r053,G017,Tessellate Studios,,US,,greenhouse,plural
+r054,G018,"Tessellate Bio, Inc.",tessellatebio.com,US,,edgar,hard negative vs G017
+r055,G018,Tessellate Biosciences,tessellatebio.com,US,,greenhouse,Bio vs Biosciences
+r056,G019,"Arcadia Grove Holdings, LLC",,US,,edgar,holding company = separate account
+r057,G019,Arcadia Grove Holdings,arcadiagroveholdings.com,US,,rss,
+r058,G020,Arcadia Grove Inc,arcadiagrove.com,US,,greenhouse,operating company
+r059,G020,Arcadia Grove,,US,,rss,
+r060,G020,Arcadia Grove Inc.,careers.arcadiagrove.com,,,lever,subdomain
+r061,G021,Redwood Ledger,boards.greenhouse.io/redwoodledger,,,greenhouse,ATS host is not the company domain
+r062,G021,Redwood Ledger Inc,redwoodledger.com,US,,edgar,
+r063,G021,Redwood Ledger,jobs.lever.co/redwoodledger,US,,lever,ATS host
+r064,G022,Ledgerwood Inc,,US,,edgar,hard negative: token anagram of G021
+r065,G022,Ledgerwood,ledgerwood.io,US,,ashby,
+r066,G023,Sable & Finch LLP,,GB,,edgar,
+r067,G023,Sable and Finch,sablefinch.com,UK,,greenhouse,
+r068,G023,Sable + Finch,sablefinch.com,,,rss,plus sign
+r069,G024,Nimbus Grid Energy Corp,,US,,edgar,
+r070,G024,Nimbus Grid,nimbusgrid.energy,US,,greenhouse,new gTLD
+r071,G024,NimbusGrid Energy,,USA,,rss,
+r072,G025,Nimbus Grid Solutions Pty Ltd,,AU,,edgar,hard negative vs G024
+r073,G025,Nimbus Grid Solutions,nimbusgridsolutions.com.au,Australia,,lever,
+r074,G026,Ostrava Mobility s.r.o.,,CZ,,rss,Czech legal form
+r075,G026,Ostrava Mobility,ostravamobility.cz,CZ,,greenhouse,
+r076,G027,Driftwood AI,driftwood.ai,US,,ashby,
+r077,G027,Driftwood.ai,,,,rss,
+r078,G027,Driftwood Artificial Intelligence Inc,https://www.driftwood.ai/?ref=producthunt,US,,edgar,AI spelled out; tracking params
+r079,G028,Driftwood Coffee Roasters LLC,,US,,edgar,hard negative vs G027
+r080,G028,Driftwood Coffee,driftwoodcoffee.com,US,,rss,
+r081,G029,Hyperion Vale,https://www.google.com/url?q=https://hyperionvale.com/pricing&sa=D,,,rss,Google redirect wrapper
+r082,G029,Hyperion Vale Inc,hyperionvale.com,US,,greenhouse,
+r083,G029,Hyperion Vale,https://l.facebook.com/l.php?u=https%3A%2F%2Fwww.hyperionvale.com%2F,US,,rss,Facebook redirect wrapper
+r084,G030,Kōen Systems K.K.,,JP,,rss,macron + dotted legal form
+r085,G030,Koen Systems,koen.co.jp,Japan,,greenhouse,multi-label public suffix
+r086,G030,KOEN SYSTEMS KABUSHIKI KAISHA,,JP,,edgar,legal form spelled out
+r087,G031,Koen Systems Inc,koensystems.com,US,,ashby,hard negative: same name different country/domain
+r088,G031,Koen Systems,,US,,rss,
+r089,G032,Atlas Forge,atlasforge.dev,US,,github,
+r090,G032,Atlas Forge Inc,,US,,edgar,
+r091,G032,atlas-forge,atlasforge.dev,,,github,org slug
+r092,G033,Atlas Forge Fitness,atlasforgefitness.com,US,,rss,hard negative vs G032
+r093,G033,Atlas Forge Fitness LLC,,US,,edgar,
+r094,G034,Payloom Inc,,US,,edgar,
+r095,G034,Payloom,payloom.com,US,,greenhouse,
+r096,G034,Brightline Payroll,payloom.com,,,lever,old brand on new domain
+r097,G034,"Payloom, Inc. (formerly Brightline Payroll, Inc.)",,US,,rss,rebrand inline
+r098,G035,Brightline Dental,brightlinedental.com,US,,rss,hard negative vs G034 old name
+r099,G035,Brightline Dental Group PLLC,,US,,edgar,
+r100,G036,Verdant Loop,app.verdantloop.com,,,ashby,product subdomain
+r101,G036,Verdant Loop Inc,status.verdantloop.com,US,,rss,
+r102,G036,Verdant Loop,verdantloop.com,US,,greenhouse,
+r103,G037,The Paper Crane Company,,US,,edgar,"leading ""The"" and ""Company"""
+r104,G037,Paper Crane Co.,papercrane.co,US,,greenhouse,.co TLD vs Co. suffix
+r105,G037,Paper Crane,papercrane.co,,,rss,
+r106,G038,Ironbark Analytics Pty Ltd,,AU,,edgar,
+r107,G038,Ironbark Analytics,ironbark.com.au,Australia,,greenhouse,
+r108,G038,IRONBARK ANALYTICS PTY. LTD.,ironbark.com.au,,,lever,
+r109,G039,Ironbark Analytics LLC,ironbarkanalytics.com,US,,ashby,hard negative: identical name different country
+r110,G039,Ironbark Analytics,,US,,rss,ambiguous without country
+r111,G040,Saffron Stack Technologies Pvt Ltd,,IN,,edgar,
+r112,G040,Saffron Stack Tech,saffronstack.com,India,,greenhouse,abbreviation
+r113,G040,Saffron Stack,saffronstack.com,,,rss,
+r114,G041,Glasswing Security Inc,,US,,edgar,
+r115,G041,Glasswing Sec,glasswingsec.com,US,,greenhouse,abbreviation
+r116,G041,Glasswing Security,glasswingsec.com,,,lever,
+r117,G042,Glasswing Butterfly Conservancy,glasswing.org,US,,rss,hard negative vs G041
+r118,G042,Glasswing Conservancy,,US,,edgar,
+r119,G043,Polar Owl Games AB,,SE,,edgar,Swedish legal form
+r120,G043,Polar Owl,polarowl.games,Sweden,,greenhouse,
+r121,G043,Polarowl Games,,SE,,rss,squashed
+r122,G044,Umbra Labs,umbralabs.xyz,GB,,github,
+r123,G044,UMBRA LABS LTD,,GB,,edgar,
+r124,G044,Umbra Laboratories Ltd,umbralabs.xyz,UK,,lever,Labs vs Laboratories
+r125,G045,"Copperleaf Insurance Agency, Inc.",,US,,edgar,
+r126,G045,Copperleaf Insurance,copperleafins.com,US,,rss,
+r127,G045,Copperleaf Ins Agency,copperleafins.com,,,greenhouse,abbreviation
+r128,G046,Marigold & Rye,https://marigoldrye.substack.com/p/launch,US,,rss,tenant subdomain on non-PSL platform
+r129,G046,Marigold and Rye Media,marigoldrye.substack.com,US,,greenhouse,
+r130,G047,Fennel Street,fennelstreet.substack.com,US,,rss,different tenant same platform
+r131,G048,Orchard Systems International Ltd,,GB,,edgar,
+r132,G048,Orchard Systems Intl,orchardsys.com,UK,,greenhouse,International vs Intl
+r133,G048,Orchard Systems,orchardsys.com,,,lever,
+r134,G049,"HALCYON BIO, INC.",,US,,edgar,
+r135,G049,Halcyon Biosciences,halcyonbio.com,US,,greenhouse,
+r136,G049,Halcyon Bio,,US,,rss,
+r137,G050,Halcyon Biotherapeutics Inc,,US,,edgar,hard negative vs G049
+r138,G050,Halcyon Tx,halcyontx.com,US,,ashby,
+r139,G051,"Ember & Oak Ventures Fund I, L.P.",,US,,edgar,fund vehicle = separate legal entity
+r140,G051,Ember and Oak Ventures Fund I LP,,US,,edgar,
+r141,G052,Ember & Oak Ventures,emberoak.vc,US,,rss,management company
+r142,G052,Ember & Oak Ventures Management LLC,,US,,edgar,
+r143,G053,Lumen Thread Inc,lumenthread.com,US,,greenhouse,
+r144,G053,Lumen Thread India Pvt Ltd,https://lumenthread.com/in,IN,,lever,country branch on parent domain = same account
+r145,G053,Lumen Thread,,US,,rss,
+r146,G054,Quillfeather Legal,quillfeather.law,US,,rss,singleton
+r147,G055,Brambleway Logistics,brambleway.com,GB,,greenhouse,singleton
+r148,G056,Tidewater Neuro,tidewaterneuro.com,US,,ashby,singleton
+r149,G057,Ravenmoor Studios,,CA,,rss,singleton
+r150,G058,Glimmerstone Mining Corp,,CA,,edgar,singleton
+r151,G059,Brook & Vale Dental Cambridge,brookvaledental.co.uk,GB,,rss,locations share one domain = one account
+r152,G059,Brook & Vale Dental Oxford,brookvaledental.co.uk,GB,,rss,
+r153,G059,Brook and Vale Dental Ltd,,GB,,edgar,
+r154,G060,Summit Solutions LLC,summitsolutions.com,US,,edgar,generic name
+r155,G060,Summit Solutions,summitsolutions.com,US,,greenhouse,
+r156,G061,Summit Solutions Group Ltd,,GB,,edgar,generic name different company
+r157,G061,Summit Solutions Group,summitsolutionsgroup.co.uk,UK,,rss,
+r158,G062,Summit Solutions Pvt Ltd,,IN,,edgar,generic name different company
+r159,G062,Summit Solutions Private Limited,summitsolutions.in,India,,greenhouse,
+r160,G063,Hatchery Ventures,hatchery.vc,US,,rss,incubator
+r161,G064,Moonwell Sensors,hatchery.vc/portfolio/moonwell,US,,rss,KNOWN HARD CASE: startup lists incubator domain
+r162,G065,Brightfin Pay,hatchery.vc/portfolio/brightfin,US,,rss,KNOWN HARD CASE: startup lists incubator domain
+r163,G064,Moonwell Sensors Inc,moonwellsensors.com,US,,greenhouse,
+r164,G065,Brightfin Pay Inc,,US,,edgar,
+r165,G066,Corvid Analytics,corvid.io,US,,ashby,
+r166,G066,Corvid Analytics Inc.,,US,,edgar,
+r167,G066,Corvid,corvid.io,,,github,short brand only
+r168,G067,Lakemont Partners 16 LLC,,US,,edgar,numbered SPV series (added after a live-run false merge)
+r169,G067,"Lakemont Partners 16, L.L.C.",,US,,edgar,dotted legal form
+r170,G068,Lakemont Partners 18 LLC,,US,,edgar,different SPV in the same series = separate account
+r171,G069,"Ridgeline Capital Fund II, L.P.",,US,,edgar,roman-numeral fund series
+r172,G069,Ridgeline Capital Fund II LP,,US,,rss,
+r173,G070,"Ridgeline Capital Fund III, L.P.",,US,,edgar,next fund in the series = separate account

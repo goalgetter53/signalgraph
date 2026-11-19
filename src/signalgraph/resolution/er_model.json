@@ -1,0 +1,35 @@
+{
+  "type": "logistic",
+  "features": [
+    "jaro_winkler",
+    "tfidf_cosine",
+    "token_containment",
+    "residual_similarity",
+    "number_mismatch",
+    "domain_match",
+    "domain_mismatch",
+    "country_match",
+    "country_mismatch"
+  ],
+  "intercept": -27.163871450936934,
+  "coef": {
+    "jaro_winkler": 24.00063724590989,
+    "tfidf_cosine": 1.7487703321143981,
+    "token_containment": -1.2451014021594136,
+    "residual_similarity": 5.2511259820588245,
+    "number_mismatch": -4.096685428951296,
+    "domain_match": 3.9603559640396386,
+    "domain_mismatch": -5.339560295759457,
+    "country_match": 0.6403143420557215,
+    "country_mismatch": -4.489300268497668
+  },
+  "l2": 1.0,
+  "training": {
+    "data": "synthetic (signalgraph.resolution.synth.generate)",
+    "seed": 13,
+    "n_entities": 3000,
+    "n_records": 6891,
+    "n_pairs": 30069,
+    "n_positive_pairs": 5903
+  }
+}

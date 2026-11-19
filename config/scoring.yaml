@@ -1,0 +1,65 @@
+# Scoring model: points = base_weight * subtype_weight * magnitude_factor * 0.5^(age/half_life)
+# score (0-100) = 100 * (1 - exp(-sum(points) / saturation_points))
+saturation_points: 40
+
+signals:
+  funding:
+    half_life_days: 90          # a raise stays relevant for a quarter-ish
+    base_weight: 25
+    max_age_days: 365
+    amendment_multiplier: 0.5   # Form D/A amendments are weaker than a new raise
+    magnitude:
+      kind: log10               # $1M -> 1.0x, $10M -> 2.0x, $100M -> 3.0x (cap)
+      reference: 1000000
+      floor: 0.25
+      cap: 3.0
+    subtypes:
+      form_d: 1.0
+      form_d_fund: 0.0          # a VC fund raising is not an operating company buying
+
+  hiring:
+    half_life_days: 30          # postings go stale fast
+    base_weight: 3
+    max_age_days: 120
+    max_points: 30              # 50 open roles should not drown out everything else
+    subtypes:
+      gtm: 2.0                  # building a sales/RevOps team = strongest GTM-tooling intent
+      data: 1.5
+      leadership: 1.5
+      security: 1.0
+      eng: 1.0
+      product: 0.8
+      ops: 0.3
+      other: 0.3
+
+  eng_activity:
+    half_life_days: 14
+    base_weight: 1
+    max_age_days: 60
+    max_points: 12
+    magnitude:
+      kind: log1p               # 1 event -> 0.69x, 20 events -> 3.0x (cap)
+      floor: 0.0
+      cap: 3.0
+    subtypes:
+      new_public_repo: 3.0
+      release: 2.0
+      create: 1.0
+      pull_request: 1.0
+      push: 0.5
+      issues: 0.5
+      stars: 0.2
+      forks: 0.2
+
+  news:
+    half_life_days: 45
+    base_weight: 6
+    max_age_days: 180
+    subtypes:
+      funding: 2.0
+      acquisition: 1.5
+      leadership_change: 1.5
+      expansion: 1.5
+      product_launch: 1.0
+      partnership: 0.8
+      general: 0.3

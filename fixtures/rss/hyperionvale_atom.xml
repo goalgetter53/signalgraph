@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+<title>Hyperion Vale Blog</title><id>urn:hyperionvale:blog</id><updated>2026-11-16T10:00:00Z</updated>
+<entry><title>Hyperion Vale partners with a regional logistics network</title><id>urn:hyperionvale:post:41</id>
+<link href="https://hyperionvale.com/blog/partnership"/><published>2026-11-16T10:00:00Z</published></entry>
+<entry><title>Hyperion Vale launches Vale Insights for operations teams</title><id>urn:hyperionvale:post:40</id>
+<link href="https://hyperionvale.com/blog/insights"/><published>2026-10-30T10:00:00Z</published></entry>
+</feed>

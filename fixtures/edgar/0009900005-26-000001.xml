@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<edgarSubmission>
+    <schemaVersion>X0708</schemaVersion>
+    <submissionType>D</submissionType>
+    <testOrLive>LIVE</testOrLive>
+    <primaryIssuer>
+        <cik>0009900005</cik>
+        <entityName>HALCYON BIO, INC.</entityName>
+        <issuerAddress><city>CAMBRIDGE</city><stateOrCountry>MA</stateOrCountry></issuerAddress>
+        <issuerPreviousNameList><value>None</value></issuerPreviousNameList>
+        <entityType>Corporation</entityType>
+    </primaryIssuer>
+    <offeringData>
+        <industryGroup><industryGroupType>Biotechnology</industryGroupType></industryGroup>
+        <typeOfFiling><newOrAmendment><isAmendment>false</isAmendment></newOrAmendment></typeOfFiling>
+        <offeringSalesAmounts>
+            <totalOfferingAmount>30000000</totalOfferingAmount>
+            <totalAmountSold>30000000</totalAmountSold>
+        </offeringSalesAmounts>
+    </offeringData>
+</edgarSubmission>

@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<edgarSubmission>
+    <schemaVersion>X0708</schemaVersion>
+    <submissionType>D/A</submissionType>
+    <testOrLive>LIVE</testOrLive>
+    <primaryIssuer>
+        <cik>0009900003</cik>
+        <entityName>Blue Peak Health Inc</entityName>
+        <issuerAddress><city>BOSTON</city><stateOrCountry>MA</stateOrCountry></issuerAddress>
+        <issuerPreviousNameList><value>None</value></issuerPreviousNameList>
+        <entityType>Corporation</entityType>
+    </primaryIssuer>
+    <offeringData>
+        <industryGroup><industryGroupType>Other Health Care</industryGroupType></industryGroup>
+        <typeOfFiling><newOrAmendment><isAmendment>true</isAmendment></newOrAmendment></typeOfFiling>
+        <offeringSalesAmounts>
+            <totalOfferingAmount>6000000</totalOfferingAmount>
+            <totalAmountSold>2000000</totalAmountSold>
+        </offeringSalesAmounts>
+    </offeringData>
+</edgarSubmission>

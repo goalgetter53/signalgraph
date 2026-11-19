@@ -1,0 +1,173 @@
+{
+  "took": 12,
+  "timed_out": false,
+  "hits": {
+    "total": {
+      "value": 5,
+      "relation": "eq"
+    },
+    "max_score": null,
+    "hits": [
+      {
+        "_index": "edgar_file",
+        "_id": "0009900001-26-000001:primary_doc.xml",
+        "_score": null,
+        "_source": {
+          "ciks": [
+            "0009900001"
+          ],
+          "display_names": [
+            "NORTHWIND ROBOTICS INC  (CIK 0009900001)"
+          ],
+          "file_date": "2026-11-12",
+          "form": "D",
+          "root_forms": [
+            "D"
+          ],
+          "file_type": "D",
+          "adsh": "0009900001-26-000001",
+          "biz_states": [
+            "TX"
+          ],
+          "biz_locations": [
+            "Austin, TX"
+          ],
+          "inc_states": [
+            "DE"
+          ],
+          "items": [
+            "06B"
+          ]
+        }
+      },
+      {
+        "_index": "edgar_file",
+        "_id": "0009900002-26-000001:primary_doc.xml",
+        "_score": null,
+        "_source": {
+          "ciks": [
+            "0009900002"
+          ],
+          "display_names": [
+            "Zentro, Inc.  (CIK 0009900002)"
+          ],
+          "file_date": "2026-11-10",
+          "form": "D",
+          "root_forms": [
+            "D"
+          ],
+          "file_type": "D",
+          "adsh": "0009900002-26-000001",
+          "biz_states": [
+            "CA"
+          ],
+          "biz_locations": [
+            "San Francisco, CA"
+          ],
+          "inc_states": [
+            "DE"
+          ],
+          "items": [
+            "06B"
+          ]
+        }
+      },
+      {
+        "_index": "edgar_file",
+        "_id": "0009900003-26-000002:primary_doc.xml",
+        "_score": null,
+        "_source": {
+          "ciks": [
+            "0009900003"
+          ],
+          "display_names": [
+            "Blue Peak Health Inc  (CIK 0009900003)"
+          ],
+          "file_date": "2026-11-05",
+          "form": "D",
+          "root_forms": [
+            "D"
+          ],
+          "file_type": "D/A",
+          "adsh": "0009900003-26-000002",
+          "biz_states": [
+            "MA"
+          ],
+          "biz_locations": [
+            "Boston, MA"
+          ],
+          "inc_states": [
+            "DE"
+          ],
+          "items": [
+            "06B"
+          ]
+        }
+      },
+      {
+        "_index": "edgar_file",
+        "_id": "0009900004-26-000001:primary_doc.xml",
+        "_score": null,
+        "_source": {
+          "ciks": [
+            "0009900004"
+          ],
+          "display_names": [
+            "Ember & Oak Ventures Fund I, L.P.  (CIK 0009900004)"
+          ],
+          "file_date": "2026-11-11",
+          "form": "D",
+          "root_forms": [
+            "D"
+          ],
+          "file_type": "D",
+          "adsh": "0009900004-26-000001",
+          "biz_states": [
+            "NY"
+          ],
+          "biz_locations": [
+            "New York, NY"
+          ],
+          "inc_states": [
+            "DE"
+          ],
+          "items": [
+            "06B"
+          ]
+        }
+      },
+      {
+        "_index": "edgar_file",
+        "_id": "0009900005-26-000001:primary_doc.xml",
+        "_score": null,
+        "_source": {
+          "ciks": [
+            "0009900005"
+          ],
+          "display_names": [
+            "HALCYON BIO, INC.  (CIK 0009900005)"
+          ],
+          "file_date": "2026-11-03",
+          "form": "D",
+          "root_forms": [
+            "D"
+          ],
+          "file_type": "D",
+          "adsh": "0009900005-26-000001",
+          "biz_states": [
+            "MA"
+          ],
+          "biz_locations": [
+            "Cambridge, MA"
+          ],
+          "inc_states": [
+            "DE"
+          ],
+          "items": [
+            "06B"
+          ]
+        }
+      }
+    ]
+  }
+}

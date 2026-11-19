@@ -1,0 +1,69 @@
+[build-system]
+requires = ["hatchling>=1.24"]
+build-backend = "hatchling.build"
+
+[project]
+name = "signalgraph"
+version = "0.1.0"
+description = "Account intelligence: turn public buying signals into a resolved, scored account graph."
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+authors = [{ name = "Hussain Singapuri", email = "Hussainsingapuri24@gmail.com" }]
+dependencies = [
+  "httpx>=0.27",
+  "duckdb>=1.0",
+  "fastapi>=0.110",
+  "uvicorn>=0.29",
+  "pydantic>=2.6",
+  "pyyaml>=6.0",
+  "click>=8.1",
+  "tldextract>=5.1",
+  "defusedxml>=0.7",
+  "numpy>=1.26",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=8",
+  "pytest-asyncio>=0.23",
+  "hypothesis>=6.100",
+  "respx>=0.21",
+  "ruff>=0.5",
+  "mypy>=1.10",
+  "types-PyYAML",
+]
+
+[project.scripts]
+signalgraph = "signalgraph.cli:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/signalgraph"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+filterwarnings = ["ignore::DeprecationWarning:fastapi.testclient", "ignore:Using `httpx` with `starlette.testclient`"]
+addopts = "-q"
+markers = ["live: hits real public APIs (skipped unless SIGNALGRAPH_LIVE=1)"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+src = ["src", "tests", "scripts"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP", "SIM", "RUF", "N", "C4", "PT"]
+ignore = ["RUF001", "RUF002", "RUF003"]
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+mypy_path = "src"
+files = ["src/signalgraph", "scripts"]
+plugins = ["pydantic.mypy"]
+
+[[tool.mypy.overrides]]
+module = ["tldextract.*", "defusedxml.*", "duckdb.*"]
+ignore_missing_imports = true

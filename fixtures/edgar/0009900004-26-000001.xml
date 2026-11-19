@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<edgarSubmission>
+    <schemaVersion>X0708</schemaVersion>
+    <submissionType>D</submissionType>
+    <testOrLive>LIVE</testOrLive>
+    <primaryIssuer>
+        <cik>0009900004</cik>
+        <entityName>Ember &amp; Oak Ventures Fund I, L.P.</entityName>
+        <issuerAddress><city>NEW YORK</city><stateOrCountry>NY</stateOrCountry></issuerAddress>
+        <issuerPreviousNameList><value>None</value></issuerPreviousNameList>
+        <entityType>Corporation</entityType>
+    </primaryIssuer>
+    <offeringData>
+        <industryGroup><industryGroupType>Pooled Investment Fund</industryGroupType></industryGroup>
+        <typeOfFiling><newOrAmendment><isAmendment>false</isAmendment></newOrAmendment></typeOfFiling>
+        <offeringSalesAmounts>
+            <totalOfferingAmount>75000000</totalOfferingAmount>
+            <totalAmountSold>40000000</totalAmountSold>
+        </offeringSalesAmounts>
+    </offeringData>
+</edgarSubmission>

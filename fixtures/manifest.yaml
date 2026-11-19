@@ -1,0 +1,17 @@
+# host+path -> fixture file (query strings ignored)
+api.ashbyhq.com/posting-api/job-board/zentro: ashby/zentro.json
+api.github.com/orgs/northwind-robotics/events: github/northwind-robotics_events.json
+api.lever.co/v0/postings/acornfield: lever/acornfield.json
+api.lever.co/v0/postings/bluepeak: lever/bluepeak.json
+api.lever.co/v0/postings/kestreldatainc: lever/kestreldatainc.json
+boards-api.greenhouse.io/v1/boards/halcyonbio/jobs: greenhouse/halcyonbio_jobs.json
+boards-api.greenhouse.io/v1/boards/kestreldata/jobs: greenhouse/kestreldata_jobs.json
+boards-api.greenhouse.io/v1/boards/northwindrobotics/jobs: greenhouse/northwindrobotics_jobs.json
+efts.sec.gov/LATEST/search-index: edgar/search_form_d.json
+hyperionvale.com/blog/atom.xml: rss/hyperionvale_atom.xml
+news.northwindrobotics.com/feed.xml: rss/northwind_feed.xml
+www.sec.gov/Archives/edgar/data/9900001/000990000126000001/primary_doc.xml: edgar/0009900001-26-000001.xml
+www.sec.gov/Archives/edgar/data/9900002/000990000226000001/primary_doc.xml: edgar/0009900002-26-000001.xml
+www.sec.gov/Archives/edgar/data/9900003/000990000326000002/primary_doc.xml: edgar/0009900003-26-000002.xml
+www.sec.gov/Archives/edgar/data/9900004/000990000426000001/primary_doc.xml: edgar/0009900004-26-000001.xml
+www.sec.gov/Archives/edgar/data/9900005/000990000526000001/primary_doc.xml: edgar/0009900005-26-000001.xml

@@ -1,0 +1,12 @@
+# Ideal Customer Profile filters. Accounts failing any rule keep their score but
+# are flagged icp_fit=false with human-readable reasons.
+countries: [US, CA, GB, IE, DE, NL, FR, SE, DK, AU, IN]
+allow_unknown_country: true
+exclude_subtypes: [form_d_fund]            # pooled investment funds
+exclude_domains: []
+exclude_name_patterns:
+  - "\\bfund\\s+[ivx0-9]+\\b"               # "Fund I", "Fund 3"
+  - "\\b(capital|ventures)\\s+(partners\\s+)?l\\.?p\\.?$"
+require_any_signal_types: [hiring, funding, news]
+min_signals: 1
+min_score: 0

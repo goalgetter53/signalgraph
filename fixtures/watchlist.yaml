@@ -1,0 +1,43 @@
+# Watchlist for the OFFLINE demo. Every company here is FICTIONAL; responses are
+# replayed from fixtures/ by FixtureTransport. Note the deliberate mess a real
+# team watchlist has: Zentro's Lever board was added under its old name
+# (Acornfield Labs) with no domain, and two different "Kestrel Data" companies exist.
+edgar:
+  enabled: true
+  lookback_days: 14
+  max_filings: 25
+
+companies:
+  - name: Northwind Robotics
+    domain: northwindrobotics.com
+    country: US
+    greenhouse: northwindrobotics
+    github: northwind-robotics
+    rss: [https://news.northwindrobotics.com/feed.xml]
+  - name: Zentro
+    domain: https://www.zentro.ai/
+    country: US
+    ashby: zentro
+  - name: Acornfield Labs
+    country: US
+    lever: acornfield
+  - name: Kestrel Data Systems Pvt. Ltd.
+    domain: kestreldata.in
+    country: IN
+    greenhouse: kestreldata
+  - name: Kestrel Data, Inc.
+    domain: kestreldata.com
+    country: US
+    lever: kestreldatainc
+  - name: BluePeak Health
+    domain: www.bluepeakhealth.com
+    country: US
+    lever: bluepeak
+  - name: Halcyon Biosciences
+    domain: halcyonbio.com
+    country: US
+    greenhouse: halcyonbio
+  - name: Hyperion Vale Inc
+    domain: "https://www.google.com/url?q=https://hyperionvale.com/&sa=D"
+    country: US
+    rss: [https://hyperionvale.com/blog/atom.xml]

@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<edgarSubmission>
+    <schemaVersion>X0708</schemaVersion>
+    <submissionType>D</submissionType>
+    <testOrLive>LIVE</testOrLive>
+    <primaryIssuer>
+        <cik>0009900002</cik>
+        <entityName>Zentro, Inc.</entityName>
+        <issuerAddress><city>SAN FRANCISCO</city><stateOrCountry>CA</stateOrCountry></issuerAddress>
+        <issuerPreviousNameList><value>Acornfield Labs, Inc.</value></issuerPreviousNameList>
+        <entityType>Corporation</entityType>
+    </primaryIssuer>
+    <offeringData>
+        <industryGroup><industryGroupType>Other Technology</industryGroupType></industryGroup>
+        <typeOfFiling><newOrAmendment><isAmendment>false</isAmendment></newOrAmendment></typeOfFiling>
+        <offeringSalesAmounts>
+            <totalOfferingAmount>4500000</totalOfferingAmount>
+            <totalAmountSold>4500000</totalAmountSold>
+        </offeringSalesAmounts>
+    </offeringData>
+</edgarSubmission>

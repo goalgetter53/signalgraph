@@ -1,0 +1,85 @@
+{
+  "jobs": [
+    {
+      "absolute_url": "https://northwindrobotics.com/careers?gh_jid=7100001",
+      "id": 7100001,
+      "title": "Enterprise Account Executive",
+      "updated_at": "2026-11-14T09:00:00-05:00",
+      "first_published": "2026-11-14T09:00:00-05:00",
+      "company_name": "Northwind Robotics",
+      "location": {
+        "name": "Austin, TX"
+      },
+      "metadata": null,
+      "requisition_id": "7100001"
+    },
+    {
+      "absolute_url": "https://northwindrobotics.com/careers?gh_jid=7100002",
+      "id": 7100002,
+      "title": "Senior Account Executive, Mid-Market",
+      "updated_at": "2026-11-13T09:00:00-05:00",
+      "first_published": "2026-11-13T09:00:00-05:00",
+      "company_name": "Northwind Robotics",
+      "location": {
+        "name": "Remote - US"
+      },
+      "metadata": null,
+      "requisition_id": "7100002"
+    },
+    {
+      "absolute_url": "https://northwindrobotics.com/careers?gh_jid=7100003",
+      "id": 7100003,
+      "title": "Sales Development Representative",
+      "updated_at": "2026-11-12T09:00:00-05:00",
+      "first_published": "2026-11-12T09:00:00-05:00",
+      "company_name": "Northwind Robotics",
+      "location": {
+        "name": "Austin, TX"
+      },
+      "metadata": null,
+      "requisition_id": "7100003"
+    },
+    {
+      "absolute_url": "https://northwindrobotics.com/careers?gh_jid=7100004",
+      "id": 7100004,
+      "title": "RevOps Manager",
+      "updated_at": "2026-11-10T09:00:00-05:00",
+      "first_published": "2026-11-10T09:00:00-05:00",
+      "company_name": "Northwind Robotics",
+      "location": {
+        "name": "Austin, TX"
+      },
+      "metadata": null,
+      "requisition_id": "7100004"
+    },
+    {
+      "absolute_url": "https://northwindrobotics.com/careers?gh_jid=7100005",
+      "id": 7100005,
+      "title": "Senior Backend Engineer (Robotics Platform)",
+      "updated_at": "2026-11-01T09:00:00-05:00",
+      "first_published": "2026-11-01T09:00:00-05:00",
+      "company_name": "Northwind Robotics",
+      "location": {
+        "name": "Austin, TX"
+      },
+      "metadata": null,
+      "requisition_id": "7100005"
+    },
+    {
+      "absolute_url": "https://northwindrobotics.com/careers?gh_jid=7100006",
+      "id": 7100006,
+      "title": "Office Manager",
+      "updated_at": "2026-10-20T09:00:00-05:00",
+      "first_published": "2026-10-20T09:00:00-05:00",
+      "company_name": "Northwind Robotics",
+      "location": {
+        "name": "Austin, TX"
+      },
+      "metadata": null,
+      "requisition_id": "7100006"
+    }
+  ],
+  "meta": {
+    "total": 6
+  }
+}

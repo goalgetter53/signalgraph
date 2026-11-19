@@ -1,0 +1,20 @@
+# Live watchlist. Board tokens / orgs / feeds are public identifiers.
+# (The offline demo uses fixtures/watchlist.yaml with FICTIONAL companies.)
+edgar:
+  enabled: true
+  lookback_days: 3     # Form D filings in the last 3 days
+  max_filings: 25      # each filing costs 1 extra request for primary_doc.xml
+
+companies:
+  - name: Stripe
+    domain: stripe.com
+    country: US
+    greenhouse: stripe
+  # Add more, e.g.:
+  # - name: Example Co
+  #   domain: example.com
+  #   country: US
+  #   lever: exampleco
+  #   ashby: exampleco
+  #   github: example-org
+  #   rss: [https://example.com/blog/rss.xml]
