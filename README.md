@@ -29,8 +29,9 @@ or domain match. That join has two problems. It misses real matches: typos, rebr
 `Incorporated`, legal names with no website. It also creates false ones: `Northwind Robotics
 GmbH` (the German subsidiary, with its own `.de` domain) is merged into the US parent, the US
 and Indian "Summit Solutions" become one company, and two startups that list their incubator's
-URL get merged with the incubator and with each other. On 5,044 real company records built from
-Wikidata, that naive join reaches **F1 0.291** (on my hand-made synthetic gold set it reaches 0.784).
+URL get merged with the incubator and with each other. On the held-out half (2,521 records) of a
+real company gold set built from Wikidata, that naive join reaches **F1 0.282** (on my hand-made
+synthetic gold set it reaches 0.784).
 Every miss is a lost touchpoint, and every false merge sends a rep to the wrong company.
 
 ## 2. What I built
@@ -39,10 +40,11 @@ Every miss is a lost touchpoint, and every false merge sends a rep to the wrong 
    They are async and polite: per-host rate limits, retries with full jitter, `Retry-After`
    support, and a contact User-Agent. Each one normalises into a typed `SignalEvent`.
 2. **An entity-resolution engine** built from canonicalisation, blocking, a learned pair scorer
-   and constrained union-find. On **real data** (5,044 records of 2,187 Wikidata companies) it
-   reaches **P 0.528 / R 0.322 / F1 0.400** against the naive join's F1 0.291 (§4). That is a clear
-   gain over the baseline, but far below the **F1 0.974** it scores on my 173-record *synthetic*
-   gold set, and the README explains why.
+   and constrained union-find. On the **held-out TEST half of a real Wikidata gold set** (2,521
+   records, 1,108 companies) the current (v2) engine reaches **P 0.708 / R 0.509 / F1 0.592**,
+   against **F1 0.393** for the v1 engine and 0.282 for the naive join (paired 95% CI of the
+   v2 − v1 gain: +0.152 to +0.247; §4). That is still far below the F1 0.915 it scores on my
+   173-record *synthetic* gold set (0.974 for v1), and the README explains why.
 3. **Explainable scoring.** Each signal type has a weight and an exponential half-life, magnitude
    is log-scaled, and each type has a cap. ICP filters live in YAML. `GET /accounts/{id}/explain`
    returns every term of the score.
@@ -97,15 +99,86 @@ the scoring model.
 |---|---|---|
 | **Name canonicalisation** | NFKC + casefold, strip accents, `&`/`+` → `and`, drop name-TLDs (`Orbitly.io`), collapse dotted abbreviations (`S.A.`, `K.K.`, `L.L.C.`), strip trailing legal forms in 15+ jurisdictions (`GmbH`, `Pvt Ltd`, `s.r.o.`, `Kabushiki Kaisha`…), extract `f/k/a` / `formerly` / `d/b/a` aliases | `Zentro Inc. (f/k/a Acornfield Labs, Inc.)` → `zentro` + alias `acornfield labs` |
 | **Domain canonicalisation** | eTLD+1 via the Public Suffix List **including the private section**; unwrap Google/Facebook/LinkedIn/Outlook redirect URLs; emails → domain; IDN → punycode; free-mail, ATS and social hosts → *unknown*; tenant subdomains on Substack, Webflow and similar hosts are kept | `latticebloom.github.io` ≠ `pinehollow.github.io`, and `boards.greenhouse.io/x` says nothing about company x |
-| **Blocking** | Candidate pair if two records share the canonical domain, the **rarest** name token (by document frequency in the batch), or a 4-char prefix. Oversized name blocks are skipped *and counted* | Avoids O(n²): 50k records need 0.024% of all pairs |
-| **Features** (9) | Jaro-Winkler, token-set TF-IDF cosine, token containment, **residual similarity** (JW of the non-shared tokens), **number mismatch** (`Fund II` vs `Fund III`), domain match/mismatch, country match/mismatch. A missing value counts as neutral, not as disagreement | |
-| **Scorer** | L2 logistic regression fitted with IRLS in numpy. Fellegi-Sunter is implemented as a baseline and compared | Weights ship as a 1 KB readable JSON file ([`er_model.json`](src/signalgraph/resolution/er_model.json)) |
-| **Clustering** | Union-find over edges, strongest first, with a **cannot-link** constraint: two clusters holding different canonical domains are never merged | Stops chaining through domain-less SEC records |
+| **Blocking** | Candidate pair if two records share the canonical domain, one of the **3 rarest** name tokens (by document frequency in the batch), a 4-char prefix, or an **initialism** key (`IBM` ↔ `International Business Machines`). Oversized name blocks are skipped *and counted* | Avoids O(n²). (Throughput numbers in §6 were measured with v1's single rarest-token key) |
+| **Features** (11) | Jaro-Winkler, token-set TF-IDF cosine, token containment, **residual similarity** (JW of the non-shared tokens), **number mismatch** (`Fund II` vs `Fund III`), domain match/mismatch, country match/mismatch, **site mismatch** (same registrable domain, different regional/section scope: `microsoft.com/en-ca` vs `microsoft.com/fr-ma`), **acronym match**. A missing value counts as neutral, not as disagreement | |
+| **Scorer** | L2 logistic regression fitted with IRLS in numpy, on synthetic pairs + the candidate pairs of the real Wikidata **DEV** split (×10). Fellegi-Sunter is implemented as a baseline and compared | Weights ship as a readable JSON file ([`er_model.json`](src/signalgraph/resolution/er_model.json)) |
+| **Clustering** | Union-find over edges (p ≥ 0.10), strongest first, with two **cannot-link** constraints: never merge clusters holding different **site keys** (domain + regional/section scope), and never merge clusters if any scored pair across them has p < 0.05 (**veto**) | Stops chaining through domain-less records and across subsidiary families |
 
 ### Results on real data (Wikidata companies)
 
-Measured by `make real-eval` → [`reports/real_eval.json`](reports/real_eval.json) /
-[`reports/real_eval.md`](reports/real_eval.md). The data was pulled from the public Wikidata
+#### v2: held-out TEST split, before vs after
+
+Measured by `make real-eval` → [`reports/real_eval_v2.json`](reports/real_eval_v2.json) /
+[`reports/real_eval_v2.md`](reports/real_eval_v2.md).
+
+- **Split.** [`data/real/wikidata_split.csv`](data/real/wikidata_split.csv)
+  ([`make_split.py`](benchmarks/real/make_split.py), seed 20261120) splits the 2,187 companies
+  into DEV (1,079 companies, 2,523 records) and TEST (1,108 companies, 2,521 records) **by company
+  group**: companies linked by a parent/subsidiary edge or by a shared normalised name are
+  always on the same side, so no company and no family of hard negatives straddles the split.
+- **DEV only** was used for error analysis, feature work, retraining and the choice of threshold,
+  veto, blocking width and real-pair weight. The choice used 5-fold **out-of-fold** scores
+  within DEV ([`tune_dev.py`](benchmarks/real/tune_dev.py) →
+  [`reports/real_tune_dev.json`](reports/real_tune_dev.json)), so the threshold was not picked
+  on pairs the model was fitted on. TEST was scored once at the end.
+- **before** = the v1 engine exactly as shipped (commit `7ab183f`), frozen as clusters in
+  [`reports/real_eval_v2_before_clusters.json`](reports/real_eval_v2_before_clusters.json) by
+  [`predict_split.py`](benchmarks/real/predict_split.py). Each split is resolved as its own
+  batch. CIs: paired percentile bootstrap (1,000 resamples) over connected components.
+
+| TEST (held out): 2,521 records, 2,117 true pairs | Precision | Recall | **F1** | TP / FP / FN | 95% CI (F1) |
+|---|---|---|---|---|---|
+| Naive: exact normalised name OR same domain | 0.386 | 0.223 | 0.282 | 471 / 749 / 1646 | 0.234–0.338 |
+| Engine before (v1, shipped) | 0.525 | 0.314 | 0.393 | 664 / 600 / 1453 | 0.335–0.452 |
+| **Engine after (v2)** | **0.708** | **0.509** | **0.592** | **1077 / 444 / 1040** | **0.550–0.630** |
+
+- **Paired difference on TEST:** after − before F1 **+0.152 to +0.247** (95% CI over 699
+  components); after − naive +0.266 to +0.351.
+- **Context only, not results:** on DEV (in-sample for v2) after/before F1 is 0.608 / 0.411; on
+  the full 5,044 records (half of them DEV, so *partly in-sample*) it is **0.576** / 0.400
+  (naive 0.298; the naive number moved from 0.291 because v2 normalises more legal forms).
+- **DEV ablations** (out-of-fold, best threshold per row): all changes 0.601; without the veto
+  0.580; synthetic-only training 0.511; one rarest-token key instead of three 0.577.
+
+What changed (all general, nothing keyed to a company name):
+
+1. **Site key with regional/section scope.** `microsoft.com/en-ca`, `nintendo.com/hk/` and
+   `poland.arcelormittal.com` keep their scope (`domains.site_key`); generic hosts and paths
+   (`www`, `jobs.`, `/careers`, pure language codes like `/de/`) do not. The cannot-link
+   constraint now uses site keys, and a new `site_mismatch` feature marks "same domain,
+   different section".
+2. **Score veto in clustering.** Two clusters are not merged if any scored pair across them is
+   below p = 0.05, which stops chains of individually plausible edges.
+3. **Legal forms.** `Public Limited Company`, `Joint Stock Company`, `Tbk`, `Ltée`, `(publ)`,
+   `S.A.B. de C.V.`, and leading `PT` / `OOO` are stripped.
+4. **Blocking.** Keys on the 3 rarest tokens (was 1) plus an initialism key. Blocking pair
+   completeness on the full set rose from 0.531 to 0.667 (0.658 on TEST).
+5. **Acronym feature** and **retraining** on synthetic + real DEV pairs; threshold **0.10**
+   (was 0.40), picked on DEV.
+
+**Honest read.** v2 is clearly better on held-out real data: on TEST, sibling-subsidiary false
+merges fell from 330 to 49 and parent/subsidiary ones from 173 to 125, and recall rose from 0.314
+to 0.509. What still fails:
+
+- **Unrelated false merges went up (97 → 270 on TEST).** The low threshold plus containment
+  edges let a generic name chain into a family: `Italia` → `IBM Italia` → the whole IBM group.
+- **No lexical overlap is still unsolved**: tickers (`INTC` for Intel), rebrands (`Facebook,
+  Inc.` → `Meta Platforms`), and translated official names (`Freie und Hansestadt Hamburg`).
+  These need an alias/ticker source, not a better string matcher. A third of TEST true pairs
+  (34%) are still never proposed by blocking.
+- **Regression on the synthetic gold set: F1 0.974 → 0.915** (P 0.939, R 0.891 at 0.10; see
+  below). The real DEV data has exactly one website per company, so "same domain" is never a
+  positive there and the `domain_match` weight fell from 3.96 to 1.64. One unit-test fixture
+  shows the cost: `Acornfield Labs` (zentro.ai) no longer joins `Zentro` (zentro.ai) without a
+  bridging alias. I kept the DEV-chosen settings rather than tune against the synthetic gold
+  set, which is a test set too.
+
+#### v1: full set, before any changes (historical)
+
+Measured by `benchmarks/real/run_real_eval.py` at commit `7ab183f` →
+[`reports/real_eval.json`](reports/real_eval.json) /
+[`reports/real_eval.md`](reports/real_eval.md). Everything in this subsection describes the v1
+engine. The data was pulled from the public Wikidata
 SPARQL endpoint on **2026-11-20** by
 [`benchmarks/real/build_wikidata_gold.py`](benchmarks/real/build_wikidata_gold.py) (`make
 real-data`). Wikidata is **CC0 1.0**, so the derived gold set is committed:
@@ -120,7 +193,7 @@ real-data`). Wikidata is **CC0 1.0**, so the derived gold set is committed:
   sampled company (P749), 648 rebranded businesses, 513 generic businesses with a website and an
   official name, and 113 other companies whose English label exactly equals a sampled label.
   Parents, subsidiaries and same-name companies are separate entities, so they are hard negatives.
-- **Protocol: no fitting and no tuning on this data.** The shipped `er_model.json` (trained on
+- **Protocol (v1): no fitting and no tuning on this data.** The v1 `er_model.json` (trained on
   synthetic data only) runs through the production `EntityResolver` at the shipped threshold
   0.40. Metrics are pairwise over all 12,718,446 record pairs. The CIs come from a percentile
   bootstrap (1,000 resamples) over the 1,520 connected components of truth ∪ predictions.
@@ -128,7 +201,7 @@ real-data`). Wikidata is **CC0 1.0**, so the derived gold set is committed:
 | Method @ 0.40, 5,044 records, 4,279 true pairs | Precision | Recall | **F1** | TP / FP / FN | 95% CI (F1) |
 |---|---|---|---|---|---|
 | Baseline: exact normalised name OR same domain | 0.422 | 0.222 | 0.291 | 950 / 1299 / 3329 | 0.263–0.320 |
-| **signalgraph engine (shipped)** | **0.528** | **0.322** | **0.400** | **1378 / 1231 / 2901** | **0.366–0.431** |
+| **signalgraph engine (v1)** | **0.528** | **0.322** | **0.400** | **1378 / 1231 / 2901** | **0.366–0.431** |
 
 - **Paired difference:** engine − baseline F1 has a 95% CI of **+0.095 to +0.124**.
 - **Blocking** proposed 12,847 candidate pairs but kept only **53.1%** of the true pairs. Nearly
@@ -209,13 +282,18 @@ engine was changed in response to these results.
 
 ### Results on the synthetic gold set (FICTIONAL records, measured by `make eval` → [`reports/er_eval.json`](reports/er_eval.json))
 
+**v2 note.** The table below is the v1 engine (synthetic-only training, threshold 0.40). The v2
+engine (threshold 0.10, model trained on synthetic + real DEV pairs) scores **P 0.939 / R 0.891 /
+F1 0.915** (139 / 9 / 17) here, a regression of 0.059 F1; `reports/er_eval.json` now holds the v2
+numbers. Fellegi-Sunter at 0.10 with the v2 features: P 0.942 / R 0.840 / F1 0.888.
+
 | Method @ threshold 0.40 | Precision | Recall | **F1** | TP / FP / FN |
 |---|---|---|---|---|
 | Baseline: exact normalised name OR same domain | 0.800 | 0.769 | 0.784 | 120 / 30 / 36 |
 | Fellegi-Sunter + constrained union-find | 0.930 | 0.942 | 0.936 | 147 / 11 / 9 |
 | Logistic regression, pairwise decisions only | 0.897 | 0.897 | 0.897 | 140 / 16 / 16 |
 | Logistic regression + plain transitive closure | 0.784 | 0.974 | 0.869 | 152 / 42 / 4 |
-| **Logistic regression + constrained union-find (shipped)** | **0.974** | **0.974** | **0.974** | **152 / 4 / 4** |
+| **Logistic regression + constrained union-find (v1 shipped)** | **0.974** | **0.974** | **0.974** | **152 / 4 / 4** |
 
 - **Blocking on the gold set:** 292 candidate pairs out of 14,878 (98.0% reduction), keeping
   96.8% of the true pairs. Transitive closure recovers most of the rest.
@@ -278,7 +356,7 @@ Example from the offline demo (`GET /accounts/{id}/explain`, fictional company, 
 ```bash
 make install         # python3.11 venv + dev extras
 make check           # ruff + mypy --strict + pytest
-make real-eval       # ER on the committed REAL Wikidata gold set -> reports/real_eval.{json,md}
+make real-eval       # ER on the REAL Wikidata gold set, held-out TEST split -> reports/real_eval_v2.{json,md}
 make demo            # offline: replays recorded fixtures (FICTIONAL companies) end to end
 make serve           # FastAPI on :8000 over the demo DB -> /docs
 ```
@@ -363,11 +441,12 @@ These four are covered by fixture tests only.
 
 ## 9. Limitations and trade-offs
 
-- **Real-data accuracy is modest (F1 0.400 on Wikidata companies, §4).** The main gaps are:
+- **Real-data accuracy is moderate (F1 0.592 on the held-out Wikidata TEST split, §4; v1 was
+  0.393).** The main gaps are:
   - rebrands and ticker aliases with no shared token (they need an alias/ticker source),
-  - subsidiaries that list the parent's domain with a path (they need path- or country-aware
-    domain keys),
-  - over-caution when one name adds words.
+  - chaining of generic names into a family at the low 0.10 threshold (`Italia` → `IBM Italia`),
+  - the v2 model trusts a shared domain less, so same-domain rebrands without an alias can stay
+    split (synthetic gold F1 fell from 0.974 to 0.915).
 - **Domain cannot-link vs rebrands.** A rebrand whose old *and* new domains both appear stays
   split unless an `f/k/a` alias or a shared domain bridges it. I chose the precision win
   (+0.19 on the gold set) over that recall.
@@ -412,9 +491,11 @@ config/          scoring.yaml, icp.yaml, watchlist.yaml (live)
 fixtures/        recorded API responses for FICTIONAL companies + manifest + demo watchlist
 data/gold/       hand-labelled ER gold set (FICTIONAL)
 data/real/       REAL gold set derived from Wikidata (CC0) + pull metadata; raw cache gitignored
-benchmarks/real/ build_wikidata_gold.py (pull + build), run_real_eval.py (evaluate)
+benchmarks/real/ build_wikidata_gold.py (pull + build), make_split.py (DEV/TEST), tune_dev.py,
+                 predict_split.py, run_split_eval.py (v2 eval), run_real_eval.py (v1 full-set eval)
 scripts/         train_er.py, eval_er.py, bench_er.py
-reports/         er_eval.json, real_eval.{json,md}, benchmark.json, live_run_2026-11-19.json
+reports/         er_eval.json, real_eval_v2.{json,md}, real_tune_dev.json, real_eval.{json,md} (v1),
+                 benchmark.json, live_run_2026-11-19.json
 tests/           unit/ integration/ property/ (hypothesis) live/ (opt-in)
 docs/adr/        0001 DuckDB · 0002 ER design · 0003 scoring model
 ```

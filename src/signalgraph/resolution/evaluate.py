@@ -17,7 +17,7 @@ import numpy as np
 
 from signalgraph.resolution.blocking import candidate_pairs
 from signalgraph.resolution.cluster import cluster, clusters_to_pairs
-from signalgraph.resolution.engine import score_pairs
+from signalgraph.resolution.engine import DEFAULT_VETO, score_pairs
 from signalgraph.resolution.features import Record
 from signalgraph.resolution.scorers import FellegiSunterMatcher, LogisticMatcher, PairScorer
 from signalgraph.resolution.synth import LabeledRecord
@@ -113,6 +113,7 @@ def evaluate(
     scorers: dict[str, PairScorer],
     thresholds: Iterable[float] = DEFAULT_THRESHOLDS,
     max_domains_options: Sequence[int | None] = (None, 1),
+    veto_below: float | None = DEFAULT_VETO,
 ) -> dict[str, Any]:
     records = to_records(labeled)
     truth = true_pairs(labeled)
@@ -131,7 +132,7 @@ def evaluate(
         "baseline_exact_name_or_domain": asdict(prf(baseline_pairs(records), truth)),
         "models": {},
     }
-    domains = [r.domain for r in records]
+    domains = [r.site or r.domain for r in records]  # same cannot-link key as the engine
     for name, scorer in scorers.items():
         scored = score_pairs(records, pairs, scorer)
         sweep = []
@@ -140,7 +141,14 @@ def evaluate(
             row: dict[str, Any] = {"threshold": t, "pairwise": asdict(prf(pairwise, truth))}
             edges = [(i, j, float(s)) for (i, j), s in zip(scored.pairs, scored.probs, strict=True)]
             for md in max_domains_options:
-                labels = cluster(len(records), edges, threshold=t, domains=domains, max_domains=md)
+                labels = cluster(
+                    len(records),
+                    edges,
+                    threshold=t,
+                    domains=domains,
+                    max_domains=md,
+                    veto_below=veto_below if veto_below is not None and veto_below < t else None,
+                )
                 key = "clustered" if md is None else f"clustered_max_domains_{md}"
                 row[key] = asdict(prf(clusters_to_pairs(labels), truth))
             sweep.append(row)

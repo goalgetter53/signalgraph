@@ -3,7 +3,7 @@ VENV ?= .venv
 BIN := $(VENV)/bin
 DEMO_DB ?= demo.duckdb
 
-.PHONY: install lint format typecheck test test-live check train eval bench real-data real-eval demo serve docker clean
+.PHONY: install lint format typecheck test test-live check train eval bench real-data real-split real-tune real-eval real-eval-v1 demo serve docker clean
 
 install:  ## create venv and install with dev extras
 	$(PY) -m venv $(VENV)
@@ -29,7 +29,7 @@ test-live:  ## hits real EDGAR + Greenhouse
 
 check: lint typecheck test
 
-train:  ## retrain the pair scorer on synthetic data -> src/signalgraph/resolution/er_model.json
+train:  ## retrain the pair scorer on synthetic + real DEV pairs -> src/signalgraph/resolution/er_model.json
 	$(BIN)/python scripts/train_er.py
 
 eval:  ## evaluate ER on the gold set -> reports/er_eval.json
@@ -41,7 +41,16 @@ bench:  ## ER throughput at 10k / 50k synthetic records -> reports/benchmark.jso
 real-data:  ## re-pull the Wikidata gold set (network; cached in data/real/raw/)
 	$(BIN)/python benchmarks/real/build_wikidata_gold.py
 
-real-eval:  ## ER on the committed REAL Wikidata gold set -> reports/real_eval.{json,md}
+real-split:  ## DEV/TEST split of the REAL gold set by company group -> data/real/wikidata_split.csv
+	$(BIN)/python benchmarks/real/make_split.py
+
+real-tune:  ## pick threshold/veto/blocking/real weight on DEV only -> reports/real_tune_dev.json
+	$(BIN)/python benchmarks/real/tune_dev.py
+
+real-eval:  ## v2: before vs after on the held-out TEST split -> reports/real_eval_v2.{json,md}
+	$(BIN)/python benchmarks/real/run_split_eval.py
+
+real-eval-v1:  ## v1 protocol: current engine on the FULL real set (now partly in-sample)
 	$(BIN)/python benchmarks/real/run_real_eval.py
 
 demo:  ## offline end-to-end run on recorded fixtures (fictional companies)

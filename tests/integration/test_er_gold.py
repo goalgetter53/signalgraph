@@ -1,6 +1,9 @@
 """Regression guard: ER quality on the hand-labelled gold set must not silently drop.
 
-Floors sit just under the measured values in reports/er_eval.json.
+Floors sit just under the measured values in reports/er_eval.json. v2 (model trained
+on synthetic + real Wikidata DEV pairs, threshold 0.1 picked on real DEV) lowered this
+synthetic gold set from F1 0.974 to 0.915, so the floors were lowered with it; see the
+README "Results on real data" section.
 """
 
 from signalgraph.resolution.cluster import clusters_to_pairs
@@ -39,9 +42,9 @@ def test_default_resolver_quality_on_gold() -> None:
     ]
     result = EntityResolver().resolve(mentions)
     m = prf(clusters_to_pairs(result.labels), true_pairs(gold))
-    assert m.precision >= 0.95
-    assert m.recall >= 0.90
-    assert m.f1 >= 0.93
+    assert m.precision >= 0.93
+    assert m.recall >= 0.88
+    assert m.f1 >= 0.91
     baseline = evaluate(gold, {})["baseline_exact_name_or_domain"]
     assert m.f1 > baseline["f1"] + 0.1
 

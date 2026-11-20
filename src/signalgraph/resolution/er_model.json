@@ -9,27 +9,35 @@
     "domain_match",
     "domain_mismatch",
     "country_match",
-    "country_mismatch"
+    "country_mismatch",
+    "site_mismatch",
+    "acronym_match"
   ],
-  "intercept": -27.163871450936934,
+  "intercept": -8.803872903269488,
   "coef": {
-    "jaro_winkler": 24.00063724590989,
-    "tfidf_cosine": 1.7487703321143981,
-    "token_containment": -1.2451014021594136,
-    "residual_similarity": 5.2511259820588245,
-    "number_mismatch": -4.096685428951296,
-    "domain_match": 3.9603559640396386,
-    "domain_mismatch": -5.339560295759457,
-    "country_match": 0.6403143420557215,
-    "country_mismatch": -4.489300268497668
+    "jaro_winkler": 3.6422277607317235,
+    "tfidf_cosine": 4.832881780342681,
+    "token_containment": -1.8029072724695456,
+    "residual_similarity": 4.057083639889499,
+    "number_mismatch": -2.2715547858673686,
+    "domain_match": 1.6435395309131042,
+    "domain_mismatch": -6.760824820530616,
+    "country_match": 0.1649487502589985,
+    "country_mismatch": -5.63194250358769,
+    "site_mismatch": -4.806946142694398,
+    "acronym_match": 3.7567759865335075
   },
   "l2": 1.0,
   "training": {
-    "data": "synthetic (signalgraph.resolution.synth.generate)",
+    "data": "synthetic (signalgraph.resolution.synth.generate) + real Wikidata DEV split",
     "seed": 13,
     "n_entities": 3000,
     "n_records": 6891,
-    "n_pairs": 30069,
-    "n_positive_pairs": 5903
+    "n_pairs": 118199,
+    "n_positive_pairs": 6064,
+    "real_dev_records": 2523,
+    "real_dev_pairs": 14453,
+    "real_dev_positive_pairs": 1455,
+    "real_weight": 10
   }
 }

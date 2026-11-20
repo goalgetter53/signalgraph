@@ -15,7 +15,10 @@ from signalgraph.resolution.cluster import cluster
 from signalgraph.resolution.features import FEATURE_NAMES, Record, TfIdf, pair_features
 from signalgraph.resolution.scorers import PairScorer, load_default_model
 
-DEFAULT_THRESHOLD = 0.4  # selected on synthetic validation, see scripts/eval_er.py
+# Both selected on the DEV half of the real Wikidata gold set with out-of-fold
+# predictions (benchmarks/real/tune_dev.py); the TEST half was not used.
+DEFAULT_THRESHOLD = 0.1
+DEFAULT_VETO: float | None = 0.05
 
 
 @dataclass
@@ -87,11 +90,13 @@ class EntityResolver:
         threshold: float = DEFAULT_THRESHOLD,
         max_domains: int | None = 1,
         max_block: int = 150,
+        veto_below: float | None = DEFAULT_VETO,
     ) -> None:
         self.scorer = scorer or load_default_model()
         self.threshold = threshold
         self.max_domains = max_domains
         self.max_block = max_block
+        self.veto_below = veto_below
 
     def resolve(self, mentions: Sequence[CompanyMention]) -> ResolutionResult:
         timings: dict[str, float] = {}
@@ -110,8 +115,9 @@ class EntityResolver:
             len(records),
             edges,
             threshold=self.threshold,
-            domains=[r.domain for r in records],
+            domains=[r.site or r.domain for r in records],
             max_domains=self.max_domains,
+            veto_below=self.veto_below,
         )
         groups: dict[int, list[Record]] = {}
         for rec, label in zip(records, labels, strict=True):

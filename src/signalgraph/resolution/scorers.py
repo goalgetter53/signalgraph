@@ -110,6 +110,8 @@ def _fs_codes(x: FloatArray) -> NDArray[np.int_]:
     cols.append(x[:, 4].astype(np.int_))  # number mismatch: 0 / 1
     cols.append(np.where(x[:, 5] > 0, 0, np.where(x[:, 6] > 0, 1, 2)))
     cols.append(np.where(x[:, 7] > 0, 0, np.where(x[:, 8] > 0, 1, 2)))
+    cols.append(x[:, 9].astype(np.int_))  # site mismatch: 0 / 1
+    cols.append(x[:, 10].astype(np.int_))  # acronym match: 0 / 1
     return np.stack(cols, axis=1)
 
 

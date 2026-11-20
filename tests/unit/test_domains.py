@@ -44,3 +44,33 @@ from signalgraph.resolution.domains import canonical_domain
 )
 def test_canonical_domain(raw: str | None, expected: str | None) -> None:
     assert canonical_domain(raw) == expected
+
+
+@pytest.mark.parametrize(
+    ("raw", "expected"),
+    [
+        # locale / region sections of a parent's site are kept as scope
+        ("https://www.microsoft.com/en-ca", "microsoft.com/en-ca"),
+        ("https://news.microsoft.com/sv-se/", "microsoft.com/sv-se"),
+        ("https://www.nintendo.com/hk/", "nintendo.com/hk"),
+        ("http://poland.arcelormittal.com/", "arcelormittal.com/poland"),
+        ("http://www.zeiss.com/microscopy", "zeiss.com/microscopy"),
+        # generic hosts / paths / pure language codes are not a scope
+        ("http://www.nintendo.com/", "nintendo.com"),
+        ("https://www.acme.com/careers?utm_source=x", "acme.com"),
+        ("jobs.acme.co.uk", "acme.co.uk"),
+        ("https://www.siemens.com/de/", "siemens.com"),
+        ("http://www.budvar.cz/index.html", "budvar.cz"),
+        ("hr@orbitly.io", "orbitly.io"),
+        # wrappers, tenants and non-identifying hosts behave like canonical_domain
+        ("https://www.google.com/url?q=https://hyperionvale.com/pricing&sa=D", "hyperionvale.com"),
+        ("https://marigoldrye.substack.com/p/launch", "marigoldrye.substack.com"),
+        ("boards.greenhouse.io/redwoodledger", None),
+        (None, None),
+    ],
+)
+def test_site_key(raw: str | None, expected: str | None) -> None:
+    from signalgraph.resolution.domains import registrable_of, site_key
+
+    assert site_key(raw) == expected
+    assert registrable_of(site_key(raw)) == canonical_domain(raw)

@@ -7,7 +7,9 @@ Robotics`` vs ``Acme Analytics``, ``Acme Japan``) survives.
 Steps: alias extraction (``f/k/a``, ``d/b/a``, ``formerly``) -> NFKC + casefold
 -> accent stripping -> ``&``/``+`` to ``and`` -> drop trailing TLDs in names
 (``Monday.com``) -> collapse abbreviation dots (``S.A.``) -> non-alphanumerics
-to spaces -> drop leading ``the`` -> strip trailing legal-form tokens.
+to spaces -> drop leading ``the`` -> strip trailing legal-form tokens (and the qualifiers of a
+multi-word form: "Public Limited Company", "Joint Stock Company") -> strip a leading
+legal form ("PT", "OOO").
 """
 
 from __future__ import annotations
@@ -26,8 +28,23 @@ LEGAL_SUFFIXES: Final[frozenset[str]] = frozenset(
         "oy", "oyj", "ab", "as", "asa", "aps", "a/s",
         "kk", "kabushiki", "kaisha", "gk", "pty", "pvt", "pte", "private", "sdn", "bhd",
         "zoo", "sp", "z", "oo", "sro", "ooo", "pjsc",
+        # v2 (real-data error analysis): more jurisdictions' legal forms
+        "tbk", "ltee", "ltda", "publ", "jsc", "ojsc", "cjsc", "pao", "oao", "zao",
+        "kft", "zrt", "nyrt", "doo", "dd", "sae", "saa", "sab", "spolka", "akcyjna",
     }
 )  # fmt: skip
+
+# Qualifiers that are only legal-form words when a legal form follows them:
+# "Public Limited Company", "Joint Stock Company", "Open Joint-Stock Company".
+LEGAL_QUALIFIERS: Final[frozenset[str]] = frozenset({"public", "joint", "stock", "open", "closed"})
+
+# Legal forms written *before* the name: "PT Bumi Resources Tbk", "OOO Yandex".
+LEGAL_PREFIXES: Final[frozenset[str]] = frozenset(
+    {"pt", "ooo", "oao", "pao", "zao", "pjsc", "ojsc", "jsc", "cjsc"}
+)
+
+# Connectors left dangling once a legal form is stripped ("Helio & Co", "Grupo X S.A. de C.V.").
+_DANGLING: Final[frozenset[str]] = frozenset({"and", "de"})
 
 _ALIAS_SPLIT: Final = re.compile(
     r"\s*(?:\(|,)?\s*\b(?:f/?k/?a|formerly(?:\s+known\s+as)?|d/?b/?a|doing\s+business\s+as|"
@@ -66,8 +83,16 @@ def normalize_name(raw: str) -> str:
     if len(tokens) > 1 and tokens[0] == "the":
         tokens = tokens[1:]
     # Strip trailing legal forms, plus a connector left dangling ("Helio & Co" -> "helio").
-    while len(tokens) > 1 and (tokens[-1] in LEGAL_SUFFIXES or tokens[-1] == "and"):
+    stripped = False
+    while len(tokens) > 1 and (
+        tokens[-1] in LEGAL_SUFFIXES
+        or tokens[-1] in _DANGLING
+        or (stripped and tokens[-1] in LEGAL_QUALIFIERS)
+    ):
+        stripped = stripped or tokens[-1] in LEGAL_SUFFIXES
         tokens.pop()
+    if len(tokens) > 1 and tokens[0] in LEGAL_PREFIXES:
+        tokens = tokens[1:]
     return " ".join(tokens)
 
 

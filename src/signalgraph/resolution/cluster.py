@@ -7,6 +7,12 @@ what makes ER fail at scale: one bad edge chains two large clusters together.
 different canonical domains (``max_domains=1``). Whether that helps depends on
 the data (it blocks some rebrand merges), so it is a switch measured on the
 gold set rather than an assumption.
+
+``veto_below`` (v2) adds a second cannot-link: two clusters are not merged if any
+*scored* pair across them has ``p_match`` below the veto. Without it a chain of
+individually plausible edges ("Nintendo Hong Kong" - "Nintendo (Hong Kong)" -
+...) glues together records the model scored as clearly different. Unscored
+(unblocked) pairs never veto.
 """
 
 from __future__ import annotations
@@ -46,6 +52,7 @@ def cluster(
     threshold: float,
     domains: Sequence[Hashable | None] | None = None,
     max_domains: int | None = None,
+    veto_below: float | None = None,
 ) -> list[int]:
     """Return a cluster label (the root index) for each of ``n`` items.
 
@@ -61,13 +68,27 @@ def cluster(
         root_domains = {
             i: (frozenset({d}) if d is not None else frozenset()) for i, d in enumerate(domains)
         }
+    edge_list = list(edges)
+    weak: dict[int, set[int]] = {}
+    members: dict[int, list[int]] = {}
+    if veto_below is not None:
+        for i, j, p in edge_list:
+            if p < veto_below:
+                weak.setdefault(i, set()).add(j)
+                weak.setdefault(j, set()).add(i)
+        members = {i: [i] for i in range(n)}
     strong = sorted(
-        ((p, i, j) for i, j, p in edges if p >= threshold), key=lambda e: (-e[0], e[1], e[2])
+        ((p, i, j) for i, j, p in edge_list if p >= threshold), key=lambda e: (-e[0], e[1], e[2])
     )
     for _, i, j in strong:
         ri, rj = uf.find(i), uf.find(j)
         if ri == rj:
             continue
+        if weak:
+            small, big = sorted((members[ri], members[rj]), key=len)
+            big_set = set(big)
+            if any(weak.get(m, set()) & big_set for m in small):
+                continue
         if constrained:
             merged = root_domains[ri] | root_domains[rj]
             assert max_domains is not None
@@ -76,7 +97,10 @@ def cluster(
             root = uf.union(ri, rj)
             root_domains[root] = merged
         else:
-            uf.union(ri, rj)
+            root = uf.union(ri, rj)
+        if veto_below is not None:
+            other = rj if root == ri else ri
+            members[root].extend(members.pop(other))
     smallest: dict[int, int] = {}
     roots = [uf.find(i) for i in range(n)]
     for i, r in enumerate(roots):

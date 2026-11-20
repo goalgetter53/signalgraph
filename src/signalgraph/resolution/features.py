@@ -11,6 +11,12 @@
   "Fund II", "Partners 16 LLC" vs "Partners 18 LLC"). Added after the first
   live EDGAR run merged two numbered SPVs.
 * domain agreement / disagreement, country agreement / disagreement.
+* site mismatch (v2): same registrable domain but a different regional/section
+  scope (``microsoft.com/en-ca`` vs ``microsoft.com/fr-ma``): the usual signature
+  of sibling subsidiaries, or of a parent and its subsidiary. Added after the
+  real-data (Wikidata) error analysis; see ``domains.site_key``.
+* acronym match (v2): one name is the initialism of the other ("IBM" vs
+  "International Business Machines").
 
 Missing values are *not* disagreement: a record without a domain gets 0 on
 both domain features, which is what lets the model learn that "both have a
@@ -26,7 +32,7 @@ from dataclasses import dataclass, field
 from functools import lru_cache
 from typing import Final
 
-from signalgraph.resolution.domains import canonical_domain
+from signalgraph.resolution.domains import canonical_domain, site_key
 from signalgraph.resolution.names import NormalizedName, normalize_company, normalize_country
 
 FEATURE_NAMES: Final[tuple[str, ...]] = (
@@ -39,7 +45,27 @@ FEATURE_NAMES: Final[tuple[str, ...]] = (
     "domain_mismatch",
     "country_match",
     "country_mismatch",
+    "site_mismatch",
+    "acronym_match",
 )
+
+_ACRONYM_STOP: Final = frozenset({"of", "and", "the", "de", "des", "du", "der", "la", "le", "for"})
+
+
+def initialism(tokens: Sequence[str]) -> str:
+    """``["international", "business", "machines"]`` -> ``"ibm"`` (stop words skipped)."""
+    return "".join(t[0] for t in tokens if t and t not in _ACRONYM_STOP)
+
+
+def acronym_match(a: str, b: str) -> bool:
+    """One name is a single token equal to the initials of the other's (2+) tokens."""
+    for short, long_ in ((a, b), (b, a)):
+        if " " in short or len(short) < 2:
+            continue
+        toks = long_.split()
+        if len(toks) >= 2 and initialism(toks) == short:
+            return True
+    return False
 
 
 def jaro(s1: str, s2: str) -> float:
@@ -142,6 +168,7 @@ class Record:
     country: str | None
     raw_name: str = ""
     token_sets: tuple[frozenset[str], ...] = field(default=())
+    site: str | None = None  # domain + regional/section scope, see domains.site_key
 
     @classmethod
     def build(
@@ -162,6 +189,7 @@ class Record:
             country=normalize_country(country),
             raw_name=raw_name,
             token_sets=tuple(frozenset(n.split()) for n in name.all if n),
+            site=site_key(raw_domain),
         )
 
 
@@ -189,9 +217,12 @@ def pair_features(a: Record, b: Record, tfidf: TfIdf) -> list[float]:
     contain = 0.0
     residual = 0.0
     number_mismatch = 1.0
+    acronym = 0.0
     for na, ta in zip(a.name.all, a.token_sets, strict=False):
         for nb, tb in zip(b.name.all, b.token_sets, strict=False):
             jw = max(jw, cached_jaro_winkler(na, nb))
+            if acronym_match(na, nb):
+                acronym = 1.0
             cos = max(cos, tfidf.cosine(ta, tb))
             if ta and tb:
                 contain = max(contain, len(ta & tb) / min(len(ta), len(tb)))
@@ -201,14 +232,18 @@ def pair_features(a: Record, b: Record, tfidf: TfIdf) -> list[float]:
                 number_mismatch = 0.0  # any alias pair without conflicting numbers clears it
     both_domain = a.domain is not None and b.domain is not None
     both_country = a.country is not None and b.country is not None
+    same_registrable = both_domain and a.domain == b.domain
+    same_site = same_registrable and (a.site or a.domain) == (b.site or b.domain)
     return [
         jw,
         cos,
         contain,
         residual,
         number_mismatch,
-        1.0 if both_domain and a.domain == b.domain else 0.0,
+        1.0 if same_site else 0.0,
         1.0 if both_domain and a.domain != b.domain else 0.0,
         1.0 if both_country and a.country == b.country else 0.0,
         1.0 if both_country and a.country != b.country else 0.0,
+        1.0 if same_registrable and not same_site else 0.0,
+        acronym,
     ]

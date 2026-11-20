@@ -131,3 +131,94 @@ def canonical_domain(raw: str | None, *, _depth: int = 0) -> str | None:
     if registrable in NON_IDENTIFYING:
         return None
     return registrable
+
+
+# --------------------------------------------------------------------- site scope
+# A subsidiary often has no domain of its own and lists a section of the parent's
+# site instead: ``microsoft.com/en-ca`` (Microsoft Canada), ``nintendo.com/hk/``,
+# ``poland.arcelormittal.com``. Reducing these to the registrable domain makes
+# siblings look like the same company. ``site_key`` keeps the regional/section
+# scope: registrable domain + non-generic subdomain + first non-generic path segment.
+
+_GENERIC_SUBDOMAINS: Final[frozenset[str]] = frozenset(
+    {
+        "www", "www1", "www2", "www3", "m", "mobile", "web", "home", "app", "apps",
+        "jobs", "careers", "career", "boards", "about", "corporate", "corp", "company",
+        "news", "newsroom", "press", "media", "ir", "investor", "investors", "blog",
+        "shop", "store", "info", "global", "group", "en", "int", "international",
+    }
+)  # fmt: skip
+_GENERIC_PATH: Final[frozenset[str]] = frozenset(
+    {
+        "careers", "career", "jobs", "job", "about", "about-us", "aboutus", "about_us",
+        "company", "home", "index", "main", "web", "site", "contact", "en", "english",
+        "global", "int", "international", "corporate", "default", "start", "welcome",
+    }
+)  # fmt: skip
+# Pure language codes say which translation of the site you see, not which company:
+# ``siemens.com/de`` and ``siemens.com/en`` are the same firm. Region-bearing codes
+# (``en-ca``, ``fr-ma``) and country codes that are not common language codes stay.
+_LANGUAGE_CODES: Final[frozenset[str]] = frozenset(
+    {
+        "en", "de", "fr", "es", "it", "nl", "pt", "ja", "zh", "ru", "sv", "pl", "ko",
+        "ar", "tr", "da", "fi", "no", "nb", "cs", "hu", "el", "he", "ro", "uk", "id",
+    }
+)  # fmt: skip
+
+
+def _path_scope(path: str) -> str | None:
+    for segment in path.split("/"):
+        seg = segment.strip().lower()
+        if not seg:
+            continue
+        stem = seg.split(".", 1)[0]  # index.html, default.aspx
+        if stem in _GENERIC_PATH or seg in _LANGUAGE_CODES:
+            return None
+        return seg
+    return None
+
+
+@lru_cache(maxsize=200_000)
+def site_key(raw: str | None) -> str | None:
+    """``canonical_domain`` plus the regional/section scope of the URL (or ``None``).
+
+    >>> site_key("https://www.microsoft.com/en-ca")
+    'microsoft.com/en-ca'
+    >>> site_key("http://poland.arcelormittal.com/")
+    'arcelormittal.com/poland'
+    >>> site_key("https://www.acme.com/careers?utm_source=x")
+    'acme.com'
+    """
+    registrable = canonical_domain(raw)
+    if registrable is None or raw is None:
+        return None
+    value = raw.strip().strip("<>\"'")
+    if "@" in value and "://" not in value and "/" not in value:
+        return registrable
+    if "://" not in value:
+        value = "http://" + value.lstrip("/")
+    try:
+        parts = urlsplit(value)
+        host = _to_ascii(parts.hostname or "")
+    except ValueError:
+        return registrable
+    if not host:
+        return registrable
+    ext = _EXTRACT(host)
+    attr = (
+        "top_domain_under_public_suffix"
+        if hasattr(ext, "top_domain_under_public_suffix")
+        else "registered_domain"
+    )
+    if str(getattr(ext, attr) or "") != registrable:
+        return registrable  # redirect wrapper or tenant host: no scope to keep
+    scope = [s for s in ext.subdomain.split(".") if s and s not in _GENERIC_SUBDOMAINS]
+    path = _path_scope(parts.path)
+    if path:
+        scope.append(path)
+    return f"{registrable}/{'/'.join(scope)}" if scope else registrable
+
+
+def registrable_of(site: str | None) -> str | None:
+    """Inverse of the scope part of ``site_key``: ``microsoft.com/en-ca`` -> ``microsoft.com``."""
+    return site.split("/", 1)[0] if site else None

@@ -83,3 +83,34 @@ def test_number_mismatch_separates_series() -> None:
     assert nm("Ridgeline Capital Fund II, L.P.", "Ridgeline Capital Fund III LP") == 1.0
     assert nm("Ridgeline Capital Fund II, L.P.", "Ridgeline Capital Fund II LP") == 0.0
     assert nm("Ember Fund I", "Ember Ventures") == 0.0  # one side has no number: unknown
+
+
+def test_v2_site_mismatch_and_acronym_features() -> None:
+    from signalgraph.resolution.features import acronym_match, initialism
+
+    ca = Record.build(0, "a", "Microsoft Canada", "https://www.microsoft.com/en-ca", None)
+    ma = Record.build(1, "b", "Microsoft Morocco", "https://www.microsoft.com/fr-ma/", None)
+    hq = Record.build(2, "c", "Microsoft", "microsoft.com/careers", None)
+    hq2 = Record.build(3, "d", "Microsoft Corp", "https://www.microsoft.com/", None)
+    tf = TfIdf(r.name.tokens for r in (ca, ma, hq, hq2))
+    names = list(FEATURE_NAMES)
+
+    def feat(a: Record, b: Record) -> dict[str, float]:
+        return dict(zip(names, pair_features(a, b, tf), strict=True))
+
+    sib = feat(ca, ma)
+    assert sib["site_mismatch"] == 1.0
+    assert sib["domain_match"] == 0.0
+    assert sib["domain_mismatch"] == 0.0
+    same = feat(hq, hq2)
+    assert same["domain_match"] == 1.0
+    assert same["site_mismatch"] == 0.0
+
+    assert initialism(["international", "business", "machines"]) == "ibm"
+    assert initialism(["bank", "of", "america"]) == "ba"
+    assert acronym_match("ibm", "international business machines")
+    assert acronym_match("international business machines", "ibm")
+    assert not acronym_match("ibm", "ibm")
+    ibm = Record.build(0, "a", "IBM", None, None)
+    full = Record.build(1, "b", "International Business Machines Corporation", None, None)
+    assert feat(ibm, full)["acronym_match"] == 1.0

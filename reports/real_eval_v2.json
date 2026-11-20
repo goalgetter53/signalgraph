@@ -1,0 +1,1104 @@
+{
+  "protocol": {
+    "split": "data/real/wikidata_split.csv (make_split.py, seed 20261120, by company group)",
+    "entities_per_split": {
+      "dev": 1079,
+      "test": 1108
+    },
+    "before": "v1 engine (commit 7ab183f), frozen clusters in reports/real_eval_v2_before_clusters.json",
+    "after": {
+      "threshold": 0.1,
+      "veto_below": 0.05,
+      "chosen_on": "DEV only, out-of-fold (reports/real_tune_dev.json)",
+      "dev_oof_choice": {
+        "n_rare": 3,
+        "real_weight": 10,
+        "threshold": 0.1,
+        "veto_below": 0.05,
+        "blocking_completeness": 0.673,
+        "candidate_pairs": 14453,
+        "precision": 0.6888,
+        "recall": 0.5333,
+        "f1": 0.6011
+      },
+      "model_training": {
+        "data": "synthetic (signalgraph.resolution.synth.generate) + real Wikidata DEV split",
+        "seed": 13,
+        "n_entities": 3000,
+        "n_records": 6891,
+        "n_pairs": 118199,
+        "n_positive_pairs": 6064,
+        "real_dev_records": 2523,
+        "real_dev_pairs": 14453,
+        "real_dev_positive_pairs": 1455,
+        "real_weight": 10
+      }
+    },
+    "test_status": "held out: not used for any fitting, feature or threshold choice",
+    "dev_status": "IN-SAMPLE for the after engine (trained and tuned on it)",
+    "full_status": "PARTLY IN-SAMPLE (half the records are DEV)",
+    "bootstrap": "paired percentile bootstrap over connected components, 1000 resamples"
+  },
+  "test": {
+    "n_records": 2521,
+    "n_entities": 1108,
+    "true_pairs": 2117,
+    "blocking_pair_completeness_after": 0.6585,
+    "candidate_pairs_after": 14984,
+    "scores": {
+      "after": {
+        "precision": 0.7081,
+        "recall": 0.5087,
+        "f1": 0.5921,
+        "tp": 1077,
+        "fp": 444,
+        "fn": 1040
+      },
+      "before": {
+        "precision": 0.5253,
+        "recall": 0.3137,
+        "f1": 0.3928,
+        "tp": 664,
+        "fp": 600,
+        "fn": 1453
+      },
+      "naive": {
+        "precision": 0.3861,
+        "recall": 0.2225,
+        "f1": 0.2823,
+        "tp": 471,
+        "fp": 749,
+        "fn": 1646
+      }
+    },
+    "bootstrap_95ci": {
+      "after": {
+        "precision": [
+          0.6248,
+          0.7869
+        ],
+        "recall": [
+          0.4791,
+          0.5382
+        ],
+        "f1": [
+          0.5496,
+          0.6305
+        ]
+      },
+      "before": {
+        "precision": [
+          0.3721,
+          0.76
+        ],
+        "recall": [
+          0.2918,
+          0.3371
+        ],
+        "f1": [
+          0.3351,
+          0.4515
+        ]
+      },
+      "naive": {
+        "precision": [
+          0.2516,
+          0.6547
+        ],
+        "recall": [
+          0.205,
+          0.2413
+        ],
+        "f1": [
+          0.234,
+          0.3379
+        ]
+      },
+      "f1_diff_after_minus_before": [
+        0.1519,
+        0.2474
+      ],
+      "f1_diff_after_minus_naive": [
+        0.2656,
+        0.3514
+      ],
+      "f1_diff_before_minus_naive": [
+        0.0907,
+        0.1303
+      ],
+      "n_components": 699,
+      "n_resamples": 1000
+    },
+    "false_merges_by_relation": {
+      "after": {
+        "parent_subsidiary": 125,
+        "sibling_subsidiaries": 49,
+        "unrelated": 270
+      },
+      "before": {
+        "parent_subsidiary": 173,
+        "sibling_subsidiaries": 330,
+        "unrelated": 97
+      },
+      "naive": {
+        "parent_subsidiary": 183,
+        "sibling_subsidiaries": 437,
+        "unrelated": 129
+      }
+    },
+    "examples_after": {
+      "misses": [
+        {
+          "a": "Italy (careers, https://www.italia.it/)",
+          "b": "Italia (registry, -)",
+          "relation": "same_entity",
+          "blocked": true
+        },
+        {
+          "a": "Italy (careers, https://www.italia.it/)",
+          "b": "Italian Republic (news, -)",
+          "relation": "same_entity",
+          "blocked": true
+        },
+        {
+          "a": "Intel (careers, https://www.intel.com)",
+          "b": "INTC (news, -)",
+          "relation": "same_entity",
+          "blocked": false
+        },
+        {
+          "a": "Intel Corporation (registry, -)",
+          "b": "INTC (news, -)",
+          "relation": "same_entity",
+          "blocked": false
+        },
+        {
+          "a": "Singapore (careers, https://www.gov.sg/)",
+          "b": "Gweriniaeth Singapôr (registry, -)",
+          "relation": "same_entity",
+          "blocked": false
+        },
+        {
+          "a": "Singapore (careers, https://www.gov.sg/)",
+          "b": "Garden City (news, -)",
+          "relation": "same_entity",
+          "blocked": false
+        },
+        {
+          "a": "Gweriniaeth Singapôr (registry, -)",
+          "b": "Garden City (news, -)",
+          "relation": "same_entity",
+          "blocked": false
+        },
+        {
+          "a": "Meta Platforms (careers, https://www.meta.com/)",
+          "b": "Facebook, Inc. (watchlist, -)",
+          "relation": "same_entity",
+          "blocked": false
+        },
+        {
+          "a": "Meta Platforms, Inc. (registry, -)",
+          "b": "Facebook, Inc. (watchlist, -)",
+          "relation": "same_entity",
+          "blocked": false
+        },
+        {
+          "a": "Pakistan (careers, https://pakistan.gov.pk)",
+          "b": "Islamic Republic of Pakistan (registry, -)",
+          "relation": "same_entity",
+          "blocked": true
+        },
+        {
+          "a": "Pakistan (careers, https://pakistan.gov.pk)",
+          "b": "Hồi Quốc (news, -)",
+          "relation": "same_entity",
+          "blocked": false
+        },
+        {
+          "a": "Islamic Republic of Pakistan (registry, -)",
+          "b": "Hồi Quốc (news, -)",
+          "relation": "same_entity",
+          "blocked": false
+        },
+        {
+          "a": "Hamburg (careers, https://www.hamburg.com/)",
+          "b": "Freie und Hansestadt Hamburg (registry, -)",
+          "relation": "same_entity",
+          "blocked": false
+        },
+        {
+          "a": "Hamburg (careers, https://www.hamburg.com/)",
+          "b": "Free and Hanseatic City of Hamburg (news, -)",
+          "relation": "same_entity",
+          "blocked": false
+        },
+        {
+          "a": "Freie und Hansestadt Hamburg (registry, -)",
+          "b": "Free and Hanseatic City of Hamburg (news, -)",
+          "relation": "same_entity",
+          "blocked": false
+        },
+        {
+          "a": "Hamburg University of Technology (careers, https://www.tuhh.de/)",
+          "b": "Technische Universität Hamburg (registry, -)",
+          "relation": "same_entity",
+          "blocked": true
+        },
+        {
+          "a": "Hamburg University of Technology (careers, https://www.tuhh.de/)",
+          "b": "TU Hamburg (news, -)",
+          "relation": "same_entity",
+          "blocked": true
+        },
+        {
+          "a": "Hamburg University of Technology (careers, https://www.tuhh.de/)",
+          "b": "Technische Universität Hamburg-Harburg (watchlist, -)",
+          "relation": "same_entity",
+          "blocked": false
+        },
+        {
+          "a": "Technische Universität Hamburg (registry, -)",
+          "b": "TU Hamburg (news, -)",
+          "relation": "same_entity",
+          "blocked": true
+        },
+        {
+          "a": "TU Hamburg (news, -)",
+          "b": "Technische Universität Hamburg-Harburg (watchlist, -)",
+          "relation": "same_entity",
+          "blocked": false
+        }
+      ],
+      "false_merges": [
+        {
+          "a": "Italia (registry, -)",
+          "b": "IBM (careers, https://www.ibm.com/)",
+          "relation": "unrelated",
+          "blocked": false
+        },
+        {
+          "a": "Italia (registry, -)",
+          "b": "International Business Machines Corporation (registry, -)",
+          "relation": "unrelated",
+          "blocked": false
+        },
+        {
+          "a": "Italia (registry, -)",
+          "b": "ING Italia (registry, -)",
+          "relation": "unrelated",
+          "blocked": true
+        },
+        {
+          "a": "Italia (registry, -)",
+          "b": "International Business Machines Corporation (news, -)",
+          "relation": "unrelated",
+          "blocked": false
+        },
+        {
+          "a": "Italia (registry, -)",
+          "b": "IBM (Netherlands) (news, -)",
+          "relation": "unrelated",
+          "blocked": false
+        },
+        {
+          "a": "Italia (registry, -)",
+          "b": "IBM (careers, -)",
+          "relation": "unrelated",
+          "blocked": false
+        },
+        {
+          "a": "Italia (registry, -)",
+          "b": "IBM Italia (news, -)",
+          "relation": "unrelated",
+          "blocked": true
+        },
+        {
+          "a": "Italia (registry, -)",
+          "b": "IBM Germany (careers, http://www.ibm.com/de/de/)",
+          "relation": "unrelated",
+          "blocked": false
+        },
+        {
+          "a": "Italia (registry, -)",
+          "b": "IBM Deutschland GmbH (news, -)",
+          "relation": "unrelated",
+          "blocked": false
+        },
+        {
+          "a": "Italia (registry, -)",
+          "b": "International Business Machines Corporation (news, -)",
+          "relation": "unrelated",
+          "blocked": false
+        },
+        {
+          "a": "Italia (registry, -)",
+          "b": "International Business Machines Corporation (news, -)",
+          "relation": "unrelated",
+          "blocked": false
+        },
+        {
+          "a": "Italian Republic (news, -)",
+          "b": "IBM (careers, https://www.ibm.com/)",
+          "relation": "unrelated",
+          "blocked": false
+        },
+        {
+          "a": "Italian Republic (news, -)",
+          "b": "International Business Machines Corporation (registry, -)",
+          "relation": "unrelated",
+          "blocked": false
+        },
+        {
+          "a": "Italian Republic (news, -)",
+          "b": "ING Italia (registry, -)",
+          "relation": "unrelated",
+          "blocked": false
+        },
+        {
+          "a": "Italian Republic (news, -)",
+          "b": "International Business Machines Corporation (news, -)",
+          "relation": "unrelated",
+          "blocked": false
+        },
+        {
+          "a": "Italian Republic (news, -)",
+          "b": "IBM (Netherlands) (news, -)",
+          "relation": "unrelated",
+          "blocked": false
+        },
+        {
+          "a": "Italian Republic (news, -)",
+          "b": "IBM (careers, -)",
+          "relation": "unrelated",
+          "blocked": false
+        },
+        {
+          "a": "Italian Republic (news, -)",
+          "b": "IBM Italia (news, -)",
+          "relation": "unrelated",
+          "blocked": false
+        },
+        {
+          "a": "Italian Republic (news, -)",
+          "b": "IBM Germany (careers, http://www.ibm.com/de/de/)",
+          "relation": "unrelated",
+          "blocked": false
+        },
+        {
+          "a": "Italian Republic (news, -)",
+          "b": "IBM Deutschland GmbH (news, -)",
+          "relation": "unrelated",
+          "blocked": false
+        }
+      ]
+    }
+  },
+  "dev": {
+    "n_records": 2523,
+    "n_entities": 1079,
+    "true_pairs": 2162,
+    "blocking_pair_completeness_after": 0.673,
+    "candidate_pairs_after": 14453,
+    "scores": {
+      "after": {
+        "precision": 0.6984,
+        "recall": 0.5389,
+        "f1": 0.6084,
+        "tp": 1165,
+        "fp": 503,
+        "fn": 997
+      },
+      "before": {
+        "precision": 0.5518,
+        "recall": 0.3279,
+        "f1": 0.4114,
+        "tp": 709,
+        "fp": 576,
+        "fn": 1453
+      },
+      "naive": {
+        "precision": 0.4829,
+        "recall": 0.2345,
+        "f1": 0.3157,
+        "tp": 507,
+        "fp": 543,
+        "fn": 1655
+      }
+    },
+    "bootstrap_95ci": {
+      "after": {
+        "precision": [
+          0.6454,
+          0.7566
+        ],
+        "recall": [
+          0.5108,
+          0.5672
+        ],
+        "f1": [
+          0.5746,
+          0.6428
+        ]
+      },
+      "before": {
+        "precision": [
+          0.4688,
+          0.6592
+        ],
+        "recall": [
+          0.3029,
+          0.3526
+        ],
+        "f1": [
+          0.3811,
+          0.4433
+        ]
+      },
+      "naive": {
+        "precision": [
+          0.3973,
+          0.5916
+        ],
+        "recall": [
+          0.2162,
+          0.2526
+        ],
+        "f1": [
+          0.2873,
+          0.3447
+        ]
+      },
+      "f1_diff_after_minus_before": [
+        0.17,
+        0.2246
+      ],
+      "f1_diff_after_minus_naive": [
+        0.2617,
+        0.3249
+      ],
+      "f1_diff_before_minus_naive": [
+        0.076,
+        0.1172
+      ],
+      "n_components": 696,
+      "n_resamples": 1000
+    },
+    "false_merges_by_relation": {
+      "after": {
+        "parent_subsidiary": 129,
+        "sibling_subsidiaries": 62,
+        "unrelated": 312
+      },
+      "before": {
+        "parent_subsidiary": 209,
+        "sibling_subsidiaries": 195,
+        "unrelated": 172
+      },
+      "naive": {
+        "parent_subsidiary": 155,
+        "sibling_subsidiaries": 214,
+        "unrelated": 174
+      }
+    },
+    "examples_after": {
+      "misses": [
+        {
+          "a": "Finland (careers, https://finland.fi/)",
+          "b": "Finnia (news, -)",
+          "relation": "same_entity",
+          "blocked": false
+        },
+        {
+          "a": "Republiken Finland (registry, -)",
+          "b": "Finnia (news, -)",
+          "relation": "same_entity",
+          "blocked": false
+        },
+        {
+          "a": "Boeing (careers, https://boeing.com/)",
+          "b": "The Boeing Company (Chicago, IL) (news, -)",
+          "relation": "same_entity",
+          "blocked": true
+        },
+        {
+          "a": "The Boeing Company (registry, -)",
+          "b": "The Boeing Company (Chicago, IL) (news, -)",
+          "relation": "same_entity",
+          "blocked": true
+        },
+        {
+          "a": "Airbus Commercial Aircraft (careers, https://www.airbus.com/en/products-services/commercial-aircraft)",
+          "b": "Airbus GIE (news, -)",
+          "relation": "same_entity",
+          "blocked": true
+        },
+        {
+          "a": "Airbus Commercial Aircraft (careers, https://www.airbus.com/en/products-services/commercial-aircraft)",
+          "b": "Airbus Industrie (watchlist, -)",
+          "relation": "same_entity",
+          "blocked": true
+        },
+        {
+          "a": "AIRBUS (registry, -)",
+          "b": "Airbus GIE (news, -)",
+          "relation": "same_entity",
+          "blocked": true
+        },
+        {
+          "a": "AIRBUS (registry, -)",
+          "b": "Airbus Industrie (watchlist, -)",
+          "relation": "same_entity",
+          "blocked": true
+        },
+        {
+          "a": "Airbus GIE (news, -)",
+          "b": "Airbus Industrie (watchlist, -)",
+          "relation": "same_entity",
+          "blocked": true
+        },
+        {
+          "a": "Germany (careers, https://verwaltung.bund.de)",
+          "b": "Alemaniako Errepublika Federala (registry, -)",
+          "relation": "same_entity",
+          "blocked": false
+        },
+        {
+          "a": "Germany (careers, https://verwaltung.bund.de)",
+          "b": "BRD (news, -)",
+          "relation": "same_entity",
+          "blocked": false
+        },
+        {
+          "a": "Alemaniako Errepublika Federala (registry, -)",
+          "b": "BRD (news, -)",
+          "relation": "same_entity",
+          "blocked": false
+        },
+        {
+          "a": "Aosta Valley (careers, https://www.regione.vda.it/)",
+          "b": "Valle d'Aosta (registry, -)",
+          "relation": "same_entity",
+          "blocked": true
+        },
+        {
+          "a": "Valle d'Aosta (registry, -)",
+          "b": "Autonomous Region of Aosta Valley (news, -)",
+          "relation": "same_entity",
+          "blocked": false
+        },
+        {
+          "a": "Nokia (careers, https://www.nokia.com/)",
+          "b": "Nokia Abp (registry, -)",
+          "relation": "same_entity",
+          "blocked": true
+        },
+        {
+          "a": "Nokia (careers, https://www.nokia.com/)",
+          "b": "Oy Nokia Ab (news, -)",
+          "relation": "same_entity",
+          "blocked": true
+        },
+        {
+          "a": "Nokia (careers, https://www.nokia.com/)",
+          "b": "Nokia Aktiebolag (watchlist, -)",
+          "relation": "same_entity",
+          "blocked": true
+        },
+        {
+          "a": "Nokia Abp (registry, -)",
+          "b": "Oy Nokia Ab (news, -)",
+          "relation": "same_entity",
+          "blocked": true
+        },
+        {
+          "a": "Nokia Abp (registry, -)",
+          "b": "Nokia Aktiebolag (watchlist, -)",
+          "relation": "same_entity",
+          "blocked": true
+        },
+        {
+          "a": "Oy Nokia Ab (news, -)",
+          "b": "Nokia Aktiebolag (watchlist, -)",
+          "relation": "same_entity",
+          "blocked": true
+        }
+      ],
+      "false_merges": [
+        {
+          "a": "Boeing (careers, https://boeing.com/)",
+          "b": "Boeing India (news, -)",
+          "relation": "parent_subsidiary",
+          "blocked": true
+        },
+        {
+          "a": "The Boeing Company (registry, -)",
+          "b": "Boeing India (news, -)",
+          "relation": "parent_subsidiary",
+          "blocked": true
+        },
+        {
+          "a": "Airbus Commercial Aircraft (careers, https://www.airbus.com/en/products-services/commercial-aircraft)",
+          "b": "Airbus (careers, https://airbus.com)",
+          "relation": "parent_subsidiary",
+          "blocked": true
+        },
+        {
+          "a": "Airbus Commercial Aircraft (careers, https://www.airbus.com/en/products-services/commercial-aircraft)",
+          "b": "Airbus SE (registry, -)",
+          "relation": "parent_subsidiary",
+          "blocked": true
+        },
+        {
+          "a": "Airbus Commercial Aircraft (careers, https://www.airbus.com/en/products-services/commercial-aircraft)",
+          "b": "Airbus Helicopters (careers, https://www.airbus.com/en/products-services/helicopters)",
+          "relation": "sibling_subsidiaries",
+          "blocked": true
+        },
+        {
+          "a": "Airbus Commercial Aircraft (careers, https://www.airbus.com/en/products-services/commercial-aircraft)",
+          "b": "Cara Operations (news, -)",
+          "relation": "unrelated",
+          "blocked": false
+        },
+        {
+          "a": "Airbus Commercial Aircraft (careers, https://www.airbus.com/en/products-services/commercial-aircraft)",
+          "b": "Cara Operations Limited (watchlist, -)",
+          "relation": "unrelated",
+          "blocked": false
+        },
+        {
+          "a": "Airbus Commercial Aircraft (careers, https://www.airbus.com/en/products-services/commercial-aircraft)",
+          "b": "Airbus Operations Limited (careers, http://www.airbus.com/company/worldwide-presence/airbus-in-uk/)",
+          "relation": "sibling_subsidiaries",
+          "blocked": true
+        },
+        {
+          "a": "Airbus Commercial Aircraft (careers, https://www.airbus.com/en/products-services/commercial-aircraft)",
+          "b": "Airbus (India) (careers, http://www.airbus.com/company/worldwide-presence/airbus-in-india/)",
+          "relation": "parent_subsidiary",
+          "blocked": true
+        },
+        {
+          "a": "Airbus Commercial Aircraft (careers, https://www.airbus.com/en/products-services/commercial-aircraft)",
+          "b": "Airbus Atlantic (careers, https://www.airbus.com/en/airbus-atlantic)",
+          "relation": "sibling_subsidiaries",
+          "blocked": true
+        },
+        {
+          "a": "AIRBUS (registry, -)",
+          "b": "Airbus (careers, https://airbus.com)",
+          "relation": "parent_subsidiary",
+          "blocked": true
+        },
+        {
+          "a": "AIRBUS (registry, -)",
+          "b": "Airbus SE (registry, -)",
+          "relation": "parent_subsidiary",
+          "blocked": true
+        },
+        {
+          "a": "AIRBUS (registry, -)",
+          "b": "Airbus Helicopters (careers, https://www.airbus.com/en/products-services/helicopters)",
+          "relation": "sibling_subsidiaries",
+          "blocked": true
+        },
+        {
+          "a": "AIRBUS (registry, -)",
+          "b": "Cara Operations (news, -)",
+          "relation": "unrelated",
+          "blocked": false
+        },
+        {
+          "a": "AIRBUS (registry, -)",
+          "b": "Cara Operations Limited (watchlist, -)",
+          "relation": "unrelated",
+          "blocked": false
+        },
+        {
+          "a": "AIRBUS (registry, -)",
+          "b": "Airbus Operations Limited (careers, http://www.airbus.com/company/worldwide-presence/airbus-in-uk/)",
+          "relation": "sibling_subsidiaries",
+          "blocked": true
+        },
+        {
+          "a": "AIRBUS (registry, -)",
+          "b": "Airbus (India) (careers, http://www.airbus.com/company/worldwide-presence/airbus-in-india/)",
+          "relation": "parent_subsidiary",
+          "blocked": true
+        },
+        {
+          "a": "AIRBUS (registry, -)",
+          "b": "Airbus Atlantic (careers, https://www.airbus.com/en/airbus-atlantic)",
+          "relation": "sibling_subsidiaries",
+          "blocked": true
+        },
+        {
+          "a": "Airbus GIE (news, -)",
+          "b": "Airbus Group (news, -)",
+          "relation": "parent_subsidiary",
+          "blocked": true
+        },
+        {
+          "a": "Airbus GIE (news, -)",
+          "b": "Airbus Group NV (watchlist, -)",
+          "relation": "parent_subsidiary",
+          "blocked": true
+        }
+      ]
+    }
+  },
+  "full": {
+    "n_records": 5044,
+    "n_entities": 2187,
+    "true_pairs": 4279,
+    "blocking_pair_completeness_after": 0.6667,
+    "candidate_pairs_after": 49518,
+    "scores": {
+      "after": {
+        "precision": 0.648,
+        "recall": 0.5179,
+        "f1": 0.5757,
+        "tp": 2216,
+        "fp": 1204,
+        "fn": 2063
+      },
+      "before": {
+        "precision": 0.5282,
+        "recall": 0.322,
+        "f1": 0.4001,
+        "tp": 1378,
+        "fp": 1231,
+        "fn": 2901
+      },
+      "naive": {
+        "precision": 0.4286,
+        "recall": 0.2286,
+        "f1": 0.2981,
+        "tp": 978,
+        "fp": 1304,
+        "fn": 3301
+      }
+    },
+    "bootstrap_95ci": {
+      "after": {
+        "precision": [
+          0.5905,
+          0.7027
+        ],
+        "recall": [
+          0.4984,
+          0.5413
+        ],
+        "f1": [
+          0.5457,
+          0.6074
+        ]
+      },
+      "before": {
+        "precision": [
+          0.4277,
+          0.6448
+        ],
+        "recall": [
+          0.3058,
+          0.3386
+        ],
+        "f1": [
+          0.3633,
+          0.4328
+        ]
+      },
+      "naive": {
+        "precision": [
+          0.3311,
+          0.5569
+        ],
+        "recall": [
+          0.2163,
+          0.2418
+        ],
+        "f1": [
+          0.2669,
+          0.3289
+        ]
+      },
+      "f1_diff_after_minus_before": [
+        0.1468,
+        0.2075
+      ],
+      "f1_diff_after_minus_naive": [
+        0.2499,
+        0.3059
+      ],
+      "f1_diff_before_minus_naive": [
+        0.0881,
+        0.1165
+      ],
+      "n_components": 1318,
+      "n_resamples": 1000
+    },
+    "false_merges_by_relation": {
+      "after": {
+        "parent_subsidiary": 254,
+        "sibling_subsidiaries": 118,
+        "unrelated": 832
+      },
+      "before": {
+        "parent_subsidiary": 383,
+        "sibling_subsidiaries": 525,
+        "unrelated": 323
+      },
+      "naive": {
+        "parent_subsidiary": 338,
+        "sibling_subsidiaries": 651,
+        "unrelated": 315
+      }
+    },
+    "examples_after": {
+      "misses": [
+        {
+          "a": "Finland (careers, https://finland.fi/)",
+          "b": "Finnia (news, -)",
+          "relation": "same_entity",
+          "blocked": false
+        },
+        {
+          "a": "Republiken Finland (registry, -)",
+          "b": "Finnia (news, -)",
+          "relation": "same_entity",
+          "blocked": false
+        },
+        {
+          "a": "Italy (careers, https://www.italia.it/)",
+          "b": "Italia (registry, -)",
+          "relation": "same_entity",
+          "blocked": true
+        },
+        {
+          "a": "Italy (careers, https://www.italia.it/)",
+          "b": "Italian Republic (news, -)",
+          "relation": "same_entity",
+          "blocked": true
+        },
+        {
+          "a": "Italia (registry, -)",
+          "b": "Italian Republic (news, -)",
+          "relation": "same_entity",
+          "blocked": true
+        },
+        {
+          "a": "Boeing (careers, https://boeing.com/)",
+          "b": "The Boeing Company (Chicago, IL) (news, -)",
+          "relation": "same_entity",
+          "blocked": true
+        },
+        {
+          "a": "The Boeing Company (registry, -)",
+          "b": "The Boeing Company (Chicago, IL) (news, -)",
+          "relation": "same_entity",
+          "blocked": true
+        },
+        {
+          "a": "Airbus Commercial Aircraft (careers, https://www.airbus.com/en/products-services/commercial-aircraft)",
+          "b": "Airbus GIE (news, -)",
+          "relation": "same_entity",
+          "blocked": true
+        },
+        {
+          "a": "Airbus Commercial Aircraft (careers, https://www.airbus.com/en/products-services/commercial-aircraft)",
+          "b": "Airbus Industrie (watchlist, -)",
+          "relation": "same_entity",
+          "blocked": true
+        },
+        {
+          "a": "AIRBUS (registry, -)",
+          "b": "Airbus GIE (news, -)",
+          "relation": "same_entity",
+          "blocked": true
+        },
+        {
+          "a": "AIRBUS (registry, -)",
+          "b": "Airbus Industrie (watchlist, -)",
+          "relation": "same_entity",
+          "blocked": true
+        },
+        {
+          "a": "Airbus GIE (news, -)",
+          "b": "Airbus Industrie (watchlist, -)",
+          "relation": "same_entity",
+          "blocked": true
+        },
+        {
+          "a": "Germany (careers, https://verwaltung.bund.de)",
+          "b": "Alemaniako Errepublika Federala (registry, -)",
+          "relation": "same_entity",
+          "blocked": false
+        },
+        {
+          "a": "Germany (careers, https://verwaltung.bund.de)",
+          "b": "BRD (news, -)",
+          "relation": "same_entity",
+          "blocked": false
+        },
+        {
+          "a": "Alemaniako Errepublika Federala (registry, -)",
+          "b": "BRD (news, -)",
+          "relation": "same_entity",
+          "blocked": false
+        },
+        {
+          "a": "Intel (careers, https://www.intel.com)",
+          "b": "INTC (news, -)",
+          "relation": "same_entity",
+          "blocked": false
+        },
+        {
+          "a": "Intel Corporation (registry, -)",
+          "b": "INTC (news, -)",
+          "relation": "same_entity",
+          "blocked": false
+        },
+        {
+          "a": "Singapore (careers, https://www.gov.sg/)",
+          "b": "Gweriniaeth Singapôr (registry, -)",
+          "relation": "same_entity",
+          "blocked": false
+        },
+        {
+          "a": "Singapore (careers, https://www.gov.sg/)",
+          "b": "Garden City (news, -)",
+          "relation": "same_entity",
+          "blocked": false
+        },
+        {
+          "a": "Gweriniaeth Singapôr (registry, -)",
+          "b": "Garden City (news, -)",
+          "relation": "same_entity",
+          "blocked": false
+        }
+      ],
+      "false_merges": [
+        {
+          "a": "Italy (careers, https://www.italia.it/)",
+          "b": "FCA Italy (news, -)",
+          "relation": "unrelated",
+          "blocked": true
+        },
+        {
+          "a": "Italy (careers, https://www.italia.it/)",
+          "b": "FCA Italy S.p.A. (watchlist, -)",
+          "relation": "unrelated",
+          "blocked": true
+        },
+        {
+          "a": "Italia (registry, -)",
+          "b": "IBM (careers, https://www.ibm.com/)",
+          "relation": "unrelated",
+          "blocked": false
+        },
+        {
+          "a": "Italia (registry, -)",
+          "b": "International Business Machines Corporation (registry, -)",
+          "relation": "unrelated",
+          "blocked": false
+        },
+        {
+          "a": "Italia (registry, -)",
+          "b": "ING Italia (registry, -)",
+          "relation": "unrelated",
+          "blocked": true
+        },
+        {
+          "a": "Italia (registry, -)",
+          "b": "IBS (news, -)",
+          "relation": "unrelated",
+          "blocked": false
+        },
+        {
+          "a": "Italia (registry, -)",
+          "b": "International Business Systems (watchlist, -)",
+          "relation": "unrelated",
+          "blocked": false
+        },
+        {
+          "a": "Italia (registry, -)",
+          "b": "International Business Machines Corporation (news, -)",
+          "relation": "unrelated",
+          "blocked": false
+        },
+        {
+          "a": "Italia (registry, -)",
+          "b": "IBM (Netherlands) (news, -)",
+          "relation": "unrelated",
+          "blocked": false
+        },
+        {
+          "a": "Italia (registry, -)",
+          "b": "IBM (careers, -)",
+          "relation": "unrelated",
+          "blocked": false
+        },
+        {
+          "a": "Italia (registry, -)",
+          "b": "IBM Italia (news, -)",
+          "relation": "unrelated",
+          "blocked": true
+        },
+        {
+          "a": "Italia (registry, -)",
+          "b": "IBM Germany (careers, http://www.ibm.com/de/de/)",
+          "relation": "unrelated",
+          "blocked": false
+        },
+        {
+          "a": "Italia (registry, -)",
+          "b": "IBM Deutschland GmbH (news, -)",
+          "relation": "unrelated",
+          "blocked": false
+        },
+        {
+          "a": "Italia (registry, -)",
+          "b": "International Business Machines Corporation (news, -)",
+          "relation": "unrelated",
+          "blocked": false
+        },
+        {
+          "a": "Italia (registry, -)",
+          "b": "International Business Machines Corporation (news, -)",
+          "relation": "unrelated",
+          "blocked": false
+        },
+        {
+          "a": "Italian Republic (news, -)",
+          "b": "Agip (careers, http://www.agip.eni.it/)",
+          "relation": "unrelated",
+          "blocked": false
+        },
+        {
+          "a": "Italian Republic (news, -)",
+          "b": "Agip S.p.A. (registry, -)",
+          "relation": "unrelated",
+          "blocked": false
+        },
+        {
+          "a": "Italian Republic (news, -)",
+          "b": "Azienda generale italiana petroli (news, -)",
+          "relation": "unrelated",
+          "blocked": false
+        },
+        {
+          "a": "Italian Republic (news, -)",
+          "b": "Italiana Petroli S.p.A. (registry, -)",
+          "relation": "unrelated",
+          "blocked": true
+        },
+        {
+          "a": "Italian Republic (news, -)",
+          "b": "API (news, -)",
+          "relation": "unrelated",
+          "blocked": false
+        }
+      ]
+    }
+  }
+}

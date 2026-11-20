@@ -12,6 +12,7 @@ import json
 from pathlib import Path
 from typing import Any
 
+from signalgraph.resolution.engine import DEFAULT_THRESHOLD
 from signalgraph.resolution.evaluate import evaluate, fit_models, load_gold
 from signalgraph.resolution.scorers import PairScorer, load_default_model
 from signalgraph.resolution.synth import generate
@@ -35,11 +36,13 @@ def main() -> None:
     # FS is fitted on the same synthetic training distribution as the shipped LR model.
     _, fs = fit_models(generate(3000, seed=13))
     scorers: dict[str, PairScorer] = {"logistic_regression": lr, "fellegi_sunter": fs}
-    # 1) pick the operating threshold on a SYNTHETIC validation set (different seed),
-    # 2) report the gold set at that threshold -> no threshold tuning on the test set.
+    # v1 picked the operating threshold on a SYNTHETIC validation set (seed 99). Since v2
+    # the shipped threshold is picked on the DEV half of the real Wikidata gold set
+    # (benchmarks/real/tune_dev.py); the gold set here is reported at that shipped
+    # threshold, and the synthetic-validation optimum is kept as a diagnostic.
     validation = evaluate(generate(1500, seed=99), {"logistic_regression": lr})
     val_best = validation["models"]["logistic_regression"]["best"]["clustered_max_domains_1"]
-    selected = float(val_best["threshold"])
+    selected = DEFAULT_THRESHOLD
     report = evaluate(gold, scorers)
     at_selected: dict[str, Any] = {}
     for name in scorers:
@@ -69,7 +72,8 @@ def main() -> None:
         best = report["models"][name]["best"]
         for key in best:
             print(_row(name, key, best))
-    print(f"threshold selected on synthetic validation: {selected} ({val_best})")
+    print(f"shipped threshold (picked on real DEV): {selected}")
+    print(f"synthetic-validation optimum (diagnostic): {val_best}")
     for name, row in at_selected.items():
         print(f"GOLD {name} @{selected}:")
         for key, val in row.items():

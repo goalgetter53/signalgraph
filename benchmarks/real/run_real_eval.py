@@ -1,4 +1,9 @@
-"""Evaluate the shipped ER engine on the real Wikidata gold set.
+"""Evaluate the shipped ER engine on the real Wikidata gold set (v1 protocol, full set).
+
+NOTE (v2): the committed ``reports/real_eval.{json,md}`` were produced by this script at
+commit 7ab183f, when the model was trained on synthetic data only. Since v2 the model and
+threshold are fitted / picked on the DEV half of this gold set, so re-running this script
+now gives partly in-sample numbers. The v2 held-out result is ``run_split_eval.py``.
 
 No fitting and no tuning: the shipped model (``er_model.json``, trained on synthetic
 data only) runs at the shipped threshold (``DEFAULT_THRESHOLD``, chosen on synthetic

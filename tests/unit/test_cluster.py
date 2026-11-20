@@ -31,3 +31,24 @@ def test_strongest_edge_wins_under_constraint() -> None:
 
 def test_clusters_to_pairs() -> None:
     assert clusters_to_pairs([0, 0, 2, 0]) == {(0, 1), (0, 3), (1, 3)}
+
+
+def test_veto_blocks_chained_merge() -> None:
+    from signalgraph.resolution.cluster import cluster
+
+    # 0-1 and 1-2 are strong, but 0-2 was scored as clearly different
+    edges = [(0, 1, 0.9), (1, 2, 0.8), (0, 2, 0.01)]
+    assert len(set(cluster(3, edges, threshold=0.5))) == 1
+    labels = cluster(3, edges, threshold=0.5, veto_below=0.05)
+    assert labels[0] == labels[1] != labels[2]
+    # unscored pairs never veto
+    assert len(set(cluster(3, edges[:2], threshold=0.5, veto_below=0.05))) == 1
+
+
+def test_site_keys_as_cannot_link() -> None:
+    from signalgraph.resolution.cluster import cluster
+
+    edges = [(0, 1, 0.9), (1, 2, 0.9)]
+    sites = ["microsoft.com/en-ca", None, "microsoft.com/fr-ma"]
+    labels = cluster(3, edges, threshold=0.5, domains=sites, max_domains=1)
+    assert labels[0] != labels[2]

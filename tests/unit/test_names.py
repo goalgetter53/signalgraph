@@ -60,3 +60,23 @@ def test_normalize_company_merges_extra_aliases_and_dedupes() -> None:
 )  # fmt: skip
 def test_normalize_country(raw: str | None, iso: str | None) -> None:
     assert normalize_country(raw) == iso
+
+
+@pytest.mark.parametrize(
+    ("raw", "expected"),
+    [
+        ("Crown Resorts Public Limited Company", "crown resorts"),
+        ("Acme Holdings PLC", "acme holdings"),
+        ("Gazprom Neft Public Joint Stock Company", "gazprom neft"),
+        ("PT Bumi Resources Tbk", "bumi resources"),
+        ("Grupo Bimbo S.A.B. de C.V.", "grupo bimbo"),
+        ("Volvo AB (publ)", "volvo"),
+        ("OOO Yandex", "yandex"),
+        ("Public Storage", "public storage"),  # "public" alone is part of the name
+        ("Open Text", "open text"),
+        ("Stock", "stock"),
+    ],
+)
+def test_v2_legal_forms(raw: str, expected: str) -> None:
+    assert normalize_name(raw) == expected
+    assert normalize_name(expected) == expected or normalize_name(normalize_name(raw)) == expected
