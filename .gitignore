@@ -17,6 +17,7 @@ htmlcov/
 *.duckdb
 *.duckdb.wal
 exports/
+data/real/raw/
 .env
 
 # Editors / OS

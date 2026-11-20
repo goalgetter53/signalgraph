@@ -1,0 +1,1392 @@
+{
+  "data": {
+    "source": "Wikidata (https://www.wikidata.org), CC0 1.0",
+    "pulled_utc": "2026-11-20",
+    "gold_csv": "data/real/wikidata_companies_gold.csv",
+    "seed_counts": {
+      "subsidiary_or_parent": 949,
+      "renamed": 700,
+      "generic": 700,
+      "homonym": 113
+    },
+    "records_by_source": {
+      "careers": 2187,
+      "news": 1372,
+      "registry": 998,
+      "watchlist": 487
+    }
+  },
+  "n_records": 5044,
+  "n_entities": 2187,
+  "true_pairs": 4279,
+  "total_pairs": 12718446,
+  "protocol": {
+    "model": "shipped er_model.json (trained on synthetic data only)",
+    "threshold": 0.4,
+    "threshold_source": "chosen on synthetic validation; not tuned on this data",
+    "max_domains": 1,
+    "metrics": "pairwise over all record pairs, transitive clusters"
+  },
+  "blocking": {
+    "candidate_pairs": 12847,
+    "pair_completeness": 0.5307,
+    "skipped_blocks": 0
+  },
+  "engine": {
+    "precision": 0.5282,
+    "recall": 0.322,
+    "f1": 0.4001,
+    "tp": 1378,
+    "fp": 1231,
+    "fn": 2901
+  },
+  "baseline_exact_name_or_domain": {
+    "precision": 0.4224,
+    "recall": 0.222,
+    "f1": 0.2911,
+    "tp": 950,
+    "fp": 1299,
+    "fn": 3329
+  },
+  "bootstrap_95ci": {
+    "n_components": 1520,
+    "n_resamples": 1000,
+    "seed": 0,
+    "engine": {
+      "precision": [
+        0.4288,
+        0.6438
+      ],
+      "recall": [
+        0.3052,
+        0.3398
+      ],
+      "f1": [
+        0.3664,
+        0.4315
+      ]
+    },
+    "baseline": {
+      "precision": [
+        0.3294,
+        0.5578
+      ],
+      "recall": [
+        0.2092,
+        0.2351
+      ],
+      "f1": [
+        0.2626,
+        0.3204
+      ]
+    },
+    "f1_diff_engine_minus_baseline": [
+      0.0946,
+      0.1242
+    ]
+  },
+  "oracle_threshold_diagnostic": {
+    "threshold": 0.1,
+    "precision": 0.4937,
+    "recall": 0.4321,
+    "f1": 0.4609,
+    "tp": 1849,
+    "fp": 1896,
+    "fn": 2430
+  },
+  "by_sampling_slice": {
+    "generic": {
+      "n_records": 1258,
+      "n_entities": 513,
+      "true_pairs": 1000,
+      "engine": {
+        "precision": 0.9732,
+        "recall": 0.4,
+        "f1": 0.567,
+        "tp": 400,
+        "fp": 11,
+        "fn": 600
+      },
+      "baseline_exact_name_or_domain": {
+        "precision": 0.9854,
+        "recall": 0.27,
+        "f1": 0.4239,
+        "tp": 270,
+        "fp": 4,
+        "fn": 730
+      }
+    },
+    "homonym": {
+      "n_records": 183,
+      "n_entities": 113,
+      "true_pairs": 81,
+      "engine": {
+        "precision": 0.7143,
+        "recall": 0.3086,
+        "f1": 0.431,
+        "tp": 25,
+        "fp": 10,
+        "fn": 56
+      },
+      "baseline_exact_name_or_domain": {
+        "precision": 0.5185,
+        "recall": 0.3457,
+        "f1": 0.4148,
+        "tp": 28,
+        "fp": 26,
+        "fn": 53
+      }
+    },
+    "renamed": {
+      "n_records": 2001,
+      "n_entities": 648,
+      "true_pairs": 2345,
+      "engine": {
+        "precision": 0.9124,
+        "recall": 0.2887,
+        "f1": 0.4386,
+        "tp": 677,
+        "fp": 65,
+        "fn": 1668
+      },
+      "baseline_exact_name_or_domain": {
+        "precision": 0.9184,
+        "recall": 0.2017,
+        "f1": 0.3308,
+        "tp": 473,
+        "fp": 42,
+        "fn": 1872
+      }
+    },
+    "subsidiary_or_parent": {
+      "n_records": 1602,
+      "n_entities": 913,
+      "true_pairs": 853,
+      "engine": {
+        "precision": 0.241,
+        "recall": 0.3236,
+        "f1": 0.2763,
+        "tp": 276,
+        "fp": 869,
+        "fn": 577
+      },
+      "baseline_exact_name_or_domain": {
+        "precision": 0.163,
+        "recall": 0.2098,
+        "f1": 0.1835,
+        "tp": 179,
+        "fp": 919,
+        "fn": 674
+      }
+    }
+  },
+  "recall_by_view_pair": {
+    "careers+registry": {
+      "true": 998,
+      "engine": 626,
+      "baseline": 500
+    },
+    "careers+news": {
+      "true": 1372,
+      "engine": 349,
+      "baseline": 208
+    },
+    "news+registry": {
+      "true": 677,
+      "engine": 132,
+      "baseline": 69
+    },
+    "careers+watchlist": {
+      "true": 487,
+      "engine": 88,
+      "baseline": 57
+    },
+    "registry+watchlist": {
+      "true": 384,
+      "engine": 57,
+      "baseline": 27
+    },
+    "news+watchlist": {
+      "true": 361,
+      "engine": 126,
+      "baseline": 89
+    }
+  },
+  "false_merges_by_relation": {
+    "engine": {
+      "parent_subsidiary": 383,
+      "sibling_subsidiaries": 525,
+      "unrelated": 323
+    },
+    "baseline": {
+      "parent_subsidiary": 337,
+      "sibling_subsidiaries": 649,
+      "unrelated": 313
+    }
+  },
+  "engine_misses_total": 2901,
+  "engine_false_merges_total": 1231,
+  "examples": {
+    "misses": [
+      {
+        "a": {
+          "record_id": "Q1001644-careers",
+          "name": "Budweiser Budvar",
+          "domain": "http://www.budvar.cz/",
+          "country": "",
+          "source": "careers"
+        },
+        "b": {
+          "record_id": "Q1001644-news",
+          "name": "Budweiser Budvar, Entreprise Nationale",
+          "domain": "",
+          "country": "",
+          "source": "news"
+        },
+        "relation": "same_entity",
+        "blocked_as_candidate": true,
+        "p_match": 0.3435,
+        "canonical": [
+          "budweiser budvar",
+          "budweiser budvar entreprise nationale"
+        ]
+      },
+      {
+        "a": {
+          "record_id": "Q1001644-careers",
+          "name": "Budweiser Budvar",
+          "domain": "http://www.budvar.cz/",
+          "country": "",
+          "source": "careers"
+        },
+        "b": {
+          "record_id": "Q1001644-registry",
+          "name": "Budějovický Budvar, národní podnik, Budweiser Budvar, National Corporation, Budweiser Budvar, Entreprise Nationale",
+          "domain": "",
+          "country": "CZ",
+          "source": "registry"
+        },
+        "relation": "same_entity",
+        "blocked_as_candidate": false,
+        "p_match": null,
+        "canonical": [
+          "budweiser budvar",
+          "budejovicky budvar narodni podnik budweiser budvar national corporation budweiser budvar entreprise nationale"
+        ]
+      },
+      {
+        "a": {
+          "record_id": "Q1001644-registry",
+          "name": "Budějovický Budvar, národní podnik, Budweiser Budvar, National Corporation, Budweiser Budvar, Entreprise Nationale",
+          "domain": "",
+          "country": "CZ",
+          "source": "registry"
+        },
+        "b": {
+          "record_id": "Q1001644-news",
+          "name": "Budweiser Budvar, Entreprise Nationale",
+          "domain": "",
+          "country": "",
+          "source": "news"
+        },
+        "relation": "same_entity",
+        "blocked_as_candidate": false,
+        "p_match": null,
+        "canonical": [
+          "budejovicky budvar narodni podnik budweiser budvar national corporation budweiser budvar entreprise nationale",
+          "budweiser budvar entreprise nationale"
+        ]
+      },
+      {
+        "a": {
+          "record_id": "Q1004799-careers",
+          "name": "Bumi Resources",
+          "domain": "http://www.bumiresources.com",
+          "country": "",
+          "source": "careers"
+        },
+        "b": {
+          "record_id": "Q1004799-news",
+          "name": "BUMI",
+          "domain": "",
+          "country": "",
+          "source": "news"
+        },
+        "relation": "same_entity",
+        "blocked_as_candidate": true,
+        "p_match": 0.2088,
+        "canonical": [
+          "bumi resources",
+          "bumi"
+        ]
+      },
+      {
+        "a": {
+          "record_id": "Q1004799-registry",
+          "name": "Bumi Resources Tbk",
+          "domain": "",
+          "country": "ID",
+          "source": "registry"
+        },
+        "b": {
+          "record_id": "Q1004799-news",
+          "name": "BUMI",
+          "domain": "",
+          "country": "",
+          "source": "news"
+        },
+        "relation": "same_entity",
+        "blocked_as_candidate": true,
+        "p_match": 0.1344,
+        "canonical": [
+          "bumi resources tbk",
+          "bumi"
+        ]
+      },
+      {
+        "a": {
+          "record_id": "Q1020035-careers",
+          "name": "Börsenverein des Deutschen Buchhandels",
+          "domain": "https://www.boersenverein.de/",
+          "country": "",
+          "source": "careers"
+        },
+        "b": {
+          "record_id": "Q1020035-news",
+          "name": "BOEV",
+          "domain": "",
+          "country": "",
+          "source": "news"
+        },
+        "relation": "same_entity",
+        "blocked_as_candidate": false,
+        "p_match": null,
+        "canonical": [
+          "borsenverein des deutschen buchhandels",
+          "boev"
+        ]
+      },
+      {
+        "a": {
+          "record_id": "Q1020035-registry",
+          "name": "Börsenverein des Deutschen Buchhandels e.V.",
+          "domain": "",
+          "country": "DE",
+          "source": "registry"
+        },
+        "b": {
+          "record_id": "Q1020035-news",
+          "name": "BOEV",
+          "domain": "",
+          "country": "",
+          "source": "news"
+        },
+        "relation": "same_entity",
+        "blocked_as_candidate": false,
+        "p_match": null,
+        "canonical": [
+          "borsenverein des deutschen buchhandels",
+          "boev"
+        ]
+      },
+      {
+        "a": {
+          "record_id": "Q1029724-careers",
+          "name": "Crown Resorts Limited",
+          "domain": "https://www.crownresorts.com.au/",
+          "country": "",
+          "source": "careers"
+        },
+        "b": {
+          "record_id": "Q1029724-news",
+          "name": "Crown Limited",
+          "domain": "",
+          "country": "",
+          "source": "news"
+        },
+        "relation": "same_entity",
+        "blocked_as_candidate": true,
+        "p_match": 0.2882,
+        "canonical": [
+          "crown resorts",
+          "crown"
+        ]
+      },
+      {
+        "a": {
+          "record_id": "Q10359961-careers",
+          "name": "AURES Holdings",
+          "domain": "https://www.aaaauto.cz/",
+          "country": "",
+          "source": "careers"
+        },
+        "b": {
+          "record_id": "Q10359961-news",
+          "name": "AAA AUTO",
+          "domain": "",
+          "country": "",
+          "source": "news"
+        },
+        "relation": "same_entity",
+        "blocked_as_candidate": false,
+        "p_match": null,
+        "canonical": [
+          "aures holdings",
+          "aaa auto"
+        ]
+      },
+      {
+        "a": {
+          "record_id": "Q10359961-careers",
+          "name": "AURES Holdings",
+          "domain": "https://www.aaaauto.cz/",
+          "country": "",
+          "source": "careers"
+        },
+        "b": {
+          "record_id": "Q10359961-watchlist",
+          "name": "AAA Auto International a.s.",
+          "domain": "",
+          "country": "",
+          "source": "watchlist"
+        },
+        "relation": "same_entity",
+        "blocked_as_candidate": false,
+        "p_match": null,
+        "canonical": [
+          "aures holdings",
+          "aaa auto international"
+        ]
+      },
+      {
+        "a": {
+          "record_id": "Q10359961-news",
+          "name": "AAA AUTO",
+          "domain": "",
+          "country": "",
+          "source": "news"
+        },
+        "b": {
+          "record_id": "Q10359961-watchlist",
+          "name": "AAA Auto International a.s.",
+          "domain": "",
+          "country": "",
+          "source": "watchlist"
+        },
+        "relation": "same_entity",
+        "blocked_as_candidate": true,
+        "p_match": 0.343,
+        "canonical": [
+          "aaa auto",
+          "aaa auto international"
+        ]
+      },
+      {
+        "a": {
+          "record_id": "Q10359961-registry",
+          "name": "AURES Holdings a.s.",
+          "domain": "",
+          "country": "CZ",
+          "source": "registry"
+        },
+        "b": {
+          "record_id": "Q10359961-news",
+          "name": "AAA AUTO",
+          "domain": "",
+          "country": "",
+          "source": "news"
+        },
+        "relation": "same_entity",
+        "blocked_as_candidate": false,
+        "p_match": null,
+        "canonical": [
+          "aures holdings",
+          "aaa auto"
+        ]
+      },
+      {
+        "a": {
+          "record_id": "Q10359961-registry",
+          "name": "AURES Holdings a.s.",
+          "domain": "",
+          "country": "CZ",
+          "source": "registry"
+        },
+        "b": {
+          "record_id": "Q10359961-watchlist",
+          "name": "AAA Auto International a.s.",
+          "domain": "",
+          "country": "",
+          "source": "watchlist"
+        },
+        "relation": "same_entity",
+        "blocked_as_candidate": false,
+        "p_match": null,
+        "canonical": [
+          "aures holdings",
+          "aaa auto international"
+        ]
+      },
+      {
+        "a": {
+          "record_id": "Q10366566-careers",
+          "name": "Sony Music Canada",
+          "domain": "http://sonymusic.ca",
+          "country": "",
+          "source": "careers"
+        },
+        "b": {
+          "record_id": "Q10366566-news",
+          "name": "CBS DISQUES CANADA LTEE",
+          "domain": "",
+          "country": "",
+          "source": "news"
+        },
+        "relation": "same_entity",
+        "blocked_as_candidate": false,
+        "p_match": null,
+        "canonical": [
+          "sony music canada",
+          "cbs disques canada ltee"
+        ]
+      },
+      {
+        "a": {
+          "record_id": "Q10366566-careers",
+          "name": "Sony Music Canada",
+          "domain": "http://sonymusic.ca",
+          "country": "",
+          "source": "careers"
+        },
+        "b": {
+          "record_id": "Q10366566-watchlist",
+          "name": "CBS RECORDS CANADA LTD.",
+          "domain": "",
+          "country": "",
+          "source": "watchlist"
+        },
+        "relation": "same_entity",
+        "blocked_as_candidate": false,
+        "p_match": null,
+        "canonical": [
+          "sony music canada",
+          "cbs records canada"
+        ]
+      },
+      {
+        "a": {
+          "record_id": "Q10366566-news",
+          "name": "CBS DISQUES CANADA LTEE",
+          "domain": "",
+          "country": "",
+          "source": "news"
+        },
+        "b": {
+          "record_id": "Q10366566-watchlist",
+          "name": "CBS RECORDS CANADA LTD.",
+          "domain": "",
+          "country": "",
+          "source": "watchlist"
+        },
+        "relation": "same_entity",
+        "blocked_as_candidate": false,
+        "p_match": null,
+        "canonical": [
+          "cbs disques canada ltee",
+          "cbs records canada"
+        ]
+      },
+      {
+        "a": {
+          "record_id": "Q10366566-registry",
+          "name": "Sony Music Entertainment (Canada) Inc.",
+          "domain": "",
+          "country": "CA",
+          "source": "registry"
+        },
+        "b": {
+          "record_id": "Q10366566-news",
+          "name": "CBS DISQUES CANADA LTEE",
+          "domain": "",
+          "country": "",
+          "source": "news"
+        },
+        "relation": "same_entity",
+        "blocked_as_candidate": false,
+        "p_match": null,
+        "canonical": [
+          "sony music entertainment canada",
+          "cbs disques canada ltee"
+        ]
+      },
+      {
+        "a": {
+          "record_id": "Q10366566-registry",
+          "name": "Sony Music Entertainment (Canada) Inc.",
+          "domain": "",
+          "country": "CA",
+          "source": "registry"
+        },
+        "b": {
+          "record_id": "Q10366566-watchlist",
+          "name": "CBS RECORDS CANADA LTD.",
+          "domain": "",
+          "country": "",
+          "source": "watchlist"
+        },
+        "relation": "same_entity",
+        "blocked_as_candidate": false,
+        "p_match": null,
+        "canonical": [
+          "sony music entertainment canada",
+          "cbs records canada"
+        ]
+      },
+      {
+        "a": {
+          "record_id": "Q104092221-careers",
+          "name": "Delivery",
+          "domain": "https://www.delivery-auto.com/",
+          "country": "",
+          "source": "careers"
+        },
+        "b": {
+          "record_id": "Q104092221-news",
+          "name": "Delivery Auto",
+          "domain": "",
+          "country": "",
+          "source": "news"
+        },
+        "relation": "same_entity",
+        "blocked_as_candidate": true,
+        "p_match": 0.5783,
+        "canonical": [
+          "delivery",
+          "delivery auto"
+        ]
+      },
+      {
+        "a": {
+          "record_id": "Q1041228-careers",
+          "name": "Carl Zeiss Microscopy",
+          "domain": "http://www.zeiss.com/microscopy",
+          "country": "",
+          "source": "careers"
+        },
+        "b": {
+          "record_id": "Q1041228-news",
+          "name": "Zeiss Microscopy",
+          "domain": "",
+          "country": "",
+          "source": "news"
+        },
+        "relation": "same_entity",
+        "blocked_as_candidate": false,
+        "p_match": null,
+        "canonical": [
+          "carl zeiss microscopy",
+          "zeiss microscopy"
+        ]
+      },
+      {
+        "a": {
+          "record_id": "Q1041228-careers",
+          "name": "Carl Zeiss Microscopy",
+          "domain": "http://www.zeiss.com/microscopy",
+          "country": "",
+          "source": "careers"
+        },
+        "b": {
+          "record_id": "Q1041228-watchlist",
+          "name": "Carl Zeiss MicroImaging GmbH",
+          "domain": "",
+          "country": "",
+          "source": "watchlist"
+        },
+        "relation": "same_entity",
+        "blocked_as_candidate": true,
+        "p_match": 0.2039,
+        "canonical": [
+          "carl zeiss microscopy",
+          "carl zeiss microimaging"
+        ]
+      },
+      {
+        "a": {
+          "record_id": "Q1041228-news",
+          "name": "Zeiss Microscopy",
+          "domain": "",
+          "country": "",
+          "source": "news"
+        },
+        "b": {
+          "record_id": "Q1041228-watchlist",
+          "name": "Carl Zeiss MicroImaging GmbH",
+          "domain": "",
+          "country": "",
+          "source": "watchlist"
+        },
+        "relation": "same_entity",
+        "blocked_as_candidate": false,
+        "p_match": null,
+        "canonical": [
+          "zeiss microscopy",
+          "carl zeiss microimaging"
+        ]
+      },
+      {
+        "a": {
+          "record_id": "Q1041228-registry",
+          "name": "Carl Zeiss Microscopy GmbH",
+          "domain": "",
+          "country": "DE",
+          "source": "registry"
+        },
+        "b": {
+          "record_id": "Q1041228-news",
+          "name": "Zeiss Microscopy",
+          "domain": "",
+          "country": "",
+          "source": "news"
+        },
+        "relation": "same_entity",
+        "blocked_as_candidate": false,
+        "p_match": null,
+        "canonical": [
+          "carl zeiss microscopy",
+          "zeiss microscopy"
+        ]
+      },
+      {
+        "a": {
+          "record_id": "Q1041228-registry",
+          "name": "Carl Zeiss Microscopy GmbH",
+          "domain": "",
+          "country": "DE",
+          "source": "registry"
+        },
+        "b": {
+          "record_id": "Q1041228-watchlist",
+          "name": "Carl Zeiss MicroImaging GmbH",
+          "domain": "",
+          "country": "",
+          "source": "watchlist"
+        },
+        "relation": "same_entity",
+        "blocked_as_candidate": true,
+        "p_match": 0.2039,
+        "canonical": [
+          "carl zeiss microscopy",
+          "carl zeiss microimaging"
+        ]
+      },
+      {
+        "a": {
+          "record_id": "Q1041597-careers",
+          "name": "Indesit Company",
+          "domain": "https://www.indesit.com/",
+          "country": "",
+          "source": "careers"
+        },
+        "b": {
+          "record_id": "Q1041597-news",
+          "name": "Merloni Elettrodomestici",
+          "domain": "",
+          "country": "",
+          "source": "news"
+        },
+        "relation": "same_entity",
+        "blocked_as_candidate": false,
+        "p_match": null,
+        "canonical": [
+          "indesit",
+          "merloni elettrodomestici"
+        ]
+      }
+    ],
+    "false_merges": [
+      {
+        "a": {
+          "record_id": "Q101569206-careers",
+          "name": "Microsoft Sweden",
+          "domain": "https://news.microsoft.com/sv-se/",
+          "country": "",
+          "source": "careers"
+        },
+        "b": {
+          "record_id": "Q103528991-careers",
+          "name": "Microsoft Canada",
+          "domain": "https://www.microsoft.com/en-ca",
+          "country": "",
+          "source": "careers"
+        },
+        "relation": "sibling_subsidiaries",
+        "blocked_as_candidate": true,
+        "p_match": 0.6147,
+        "canonical": [
+          "microsoft sweden",
+          "microsoft canada"
+        ]
+      },
+      {
+        "a": {
+          "record_id": "Q101569206-careers",
+          "name": "Microsoft Sweden",
+          "domain": "https://news.microsoft.com/sv-se/",
+          "country": "",
+          "source": "careers"
+        },
+        "b": {
+          "record_id": "Q103528991-news",
+          "name": "Microsoft (Canada)",
+          "domain": "",
+          "country": "",
+          "source": "news"
+        },
+        "relation": "sibling_subsidiaries",
+        "blocked_as_candidate": true,
+        "p_match": 0.0295,
+        "canonical": [
+          "microsoft sweden",
+          "microsoft canada"
+        ]
+      },
+      {
+        "a": {
+          "record_id": "Q101569206-careers",
+          "name": "Microsoft Sweden",
+          "domain": "https://news.microsoft.com/sv-se/",
+          "country": "",
+          "source": "careers"
+        },
+        "b": {
+          "record_id": "Q114561988-careers",
+          "name": "Microsoft Morocco",
+          "domain": "https://www.microsoft.com/fr-ma/",
+          "country": "",
+          "source": "careers"
+        },
+        "relation": "sibling_subsidiaries",
+        "blocked_as_candidate": true,
+        "p_match": 0.0486,
+        "canonical": [
+          "microsoft sweden",
+          "microsoft morocco"
+        ]
+      },
+      {
+        "a": {
+          "record_id": "Q1034670-careers",
+          "name": "Capitalia",
+          "domain": "http://www.capitalia.it/",
+          "country": "",
+          "source": "careers"
+        },
+        "b": {
+          "record_id": "Q123471776-registry",
+          "name": "Capitalia SE",
+          "domain": "",
+          "country": "LV",
+          "source": "registry"
+        },
+        "relation": "unrelated",
+        "blocked_as_candidate": true,
+        "p_match": 0.9303,
+        "canonical": [
+          "capitalia",
+          "capitalia"
+        ]
+      },
+      {
+        "a": {
+          "record_id": "Q103528991-careers",
+          "name": "Microsoft Canada",
+          "domain": "https://www.microsoft.com/en-ca",
+          "country": "",
+          "source": "careers"
+        },
+        "b": {
+          "record_id": "Q114561988-careers",
+          "name": "Microsoft Morocco",
+          "domain": "https://www.microsoft.com/fr-ma/",
+          "country": "",
+          "source": "careers"
+        },
+        "relation": "sibling_subsidiaries",
+        "blocked_as_candidate": true,
+        "p_match": 0.093,
+        "canonical": [
+          "microsoft canada",
+          "microsoft morocco"
+        ]
+      },
+      {
+        "a": {
+          "record_id": "Q103528991-news",
+          "name": "Microsoft (Canada)",
+          "domain": "",
+          "country": "",
+          "source": "news"
+        },
+        "b": {
+          "record_id": "Q114561988-careers",
+          "name": "Microsoft Morocco",
+          "domain": "https://www.microsoft.com/fr-ma/",
+          "country": "",
+          "source": "careers"
+        },
+        "relation": "sibling_subsidiaries",
+        "blocked_as_candidate": true,
+        "p_match": 0.002,
+        "canonical": [
+          "microsoft canada",
+          "microsoft morocco"
+        ]
+      },
+      {
+        "a": {
+          "record_id": "Q1047009-careers",
+          "name": "Disney Store",
+          "domain": "https://www.disneystore.com/",
+          "country": "",
+          "source": "careers"
+        },
+        "b": {
+          "record_id": "Q5919785-news",
+          "name": "Disney Star",
+          "domain": "",
+          "country": "",
+          "source": "news"
+        },
+        "relation": "sibling_subsidiaries",
+        "blocked_as_candidate": true,
+        "p_match": 0.492,
+        "canonical": [
+          "disney store",
+          "disney star"
+        ]
+      },
+      {
+        "a": {
+          "record_id": "Q1047009-careers",
+          "name": "Disney Store",
+          "domain": "https://www.disneystore.com/",
+          "country": "",
+          "source": "careers"
+        },
+        "b": {
+          "record_id": "Q5919785-registry",
+          "name": "Disney Star India Private Limited",
+          "domain": "",
+          "country": "IN",
+          "source": "registry"
+        },
+        "relation": "sibling_subsidiaries",
+        "blocked_as_candidate": true,
+        "p_match": 0.0024,
+        "canonical": [
+          "disney store",
+          "disney star india"
+        ]
+      },
+      {
+        "a": {
+          "record_id": "Q1054787-watchlist",
+          "name": "NIPPON TELEGRAPH AND TELEPHONE CORPORATION",
+          "domain": "",
+          "country": "",
+          "source": "watchlist"
+        },
+        "b": {
+          "record_id": "Q11628418-watchlist",
+          "name": "Nippon Telegraph and Telephone West Corporation",
+          "domain": "",
+          "country": "",
+          "source": "watchlist"
+        },
+        "relation": "parent_subsidiary",
+        "blocked_as_candidate": true,
+        "p_match": 0.8425,
+        "canonical": [
+          "nippon telegraph and telephone",
+          "nippon telegraph and telephone west"
+        ]
+      },
+      {
+        "a": {
+          "record_id": "Q10854950-watchlist",
+          "name": "ArcelorMittal Ostrava a.s.",
+          "domain": "",
+          "country": "",
+          "source": "watchlist"
+        },
+        "b": {
+          "record_id": "Q11822675-careers",
+          "name": "ArcelorMittal Poland",
+          "domain": "https://poland.arcelormittal.com/",
+          "country": "",
+          "source": "careers"
+        },
+        "relation": "sibling_subsidiaries",
+        "blocked_as_candidate": true,
+        "p_match": 0.0944,
+        "canonical": [
+          "arcelormittal ostrava",
+          "arcelormittal poland"
+        ]
+      },
+      {
+        "a": {
+          "record_id": "Q10854950-watchlist",
+          "name": "ArcelorMittal Ostrava a.s.",
+          "domain": "",
+          "country": "",
+          "source": "watchlist"
+        },
+        "b": {
+          "record_id": "Q11822675-registry",
+          "name": "ARCELORMITTAL POLAND S.A.",
+          "domain": "",
+          "country": "PL",
+          "source": "registry"
+        },
+        "relation": "sibling_subsidiaries",
+        "blocked_as_candidate": true,
+        "p_match": 0.0944,
+        "canonical": [
+          "arcelormittal ostrava",
+          "arcelormittal poland"
+        ]
+      },
+      {
+        "a": {
+          "record_id": "Q10854950-watchlist",
+          "name": "ArcelorMittal Ostrava a.s.",
+          "domain": "",
+          "country": "",
+          "source": "watchlist"
+        },
+        "b": {
+          "record_id": "Q29123965-careers",
+          "name": "ArcelorMittal Spain",
+          "domain": "http://spain.arcelormittal.com/",
+          "country": "",
+          "source": "careers"
+        },
+        "relation": "sibling_subsidiaries",
+        "blocked_as_candidate": true,
+        "p_match": 0.1218,
+        "canonical": [
+          "arcelormittal ostrava",
+          "arcelormittal spain"
+        ]
+      },
+      {
+        "a": {
+          "record_id": "Q10854950-watchlist",
+          "name": "ArcelorMittal Ostrava a.s.",
+          "domain": "",
+          "country": "",
+          "source": "watchlist"
+        },
+        "b": {
+          "record_id": "Q29123967-careers",
+          "name": "ArcelorMittal (Belgium)",
+          "domain": "http://corporate.arcelormittal.com/sustainability/local-picture/belgium",
+          "country": "",
+          "source": "careers"
+        },
+        "relation": "sibling_subsidiaries",
+        "blocked_as_candidate": true,
+        "p_match": 0.0019,
+        "canonical": [
+          "arcelormittal ostrava",
+          "arcelormittal belgium"
+        ]
+      },
+      {
+        "a": {
+          "record_id": "Q10854950-watchlist",
+          "name": "ArcelorMittal Ostrava a.s.",
+          "domain": "",
+          "country": "",
+          "source": "watchlist"
+        },
+        "b": {
+          "record_id": "Q29123967-news",
+          "name": "ArcelorMittal Belgium",
+          "domain": "",
+          "country": "",
+          "source": "news"
+        },
+        "relation": "sibling_subsidiaries",
+        "blocked_as_candidate": true,
+        "p_match": 0.0019,
+        "canonical": [
+          "arcelormittal ostrava",
+          "arcelormittal belgium"
+        ]
+      },
+      {
+        "a": {
+          "record_id": "Q10854950-watchlist",
+          "name": "ArcelorMittal Ostrava a.s.",
+          "domain": "",
+          "country": "",
+          "source": "watchlist"
+        },
+        "b": {
+          "record_id": "Q30338807-careers",
+          "name": "ArcelorMittal (Germany)",
+          "domain": "http://germany.arcelormittal.com/",
+          "country": "",
+          "source": "careers"
+        },
+        "relation": "sibling_subsidiaries",
+        "blocked_as_candidate": true,
+        "p_match": 0.0774,
+        "canonical": [
+          "arcelormittal ostrava",
+          "arcelormittal germany"
+        ]
+      },
+      {
+        "a": {
+          "record_id": "Q10884665-careers",
+          "name": "Nintendo Hong Kong",
+          "domain": "https://www.nintendo.com/hk/",
+          "country": "",
+          "source": "careers"
+        },
+        "b": {
+          "record_id": "Q110493947-careers",
+          "name": "Nintendo of Canada",
+          "domain": "https://www.nintendo.com/en-ca/",
+          "country": "",
+          "source": "careers"
+        },
+        "relation": "sibling_subsidiaries",
+        "blocked_as_candidate": true,
+        "p_match": 0.5741,
+        "canonical": [
+          "nintendo hong kong",
+          "nintendo of canada"
+        ]
+      },
+      {
+        "a": {
+          "record_id": "Q10884665-careers",
+          "name": "Nintendo Hong Kong",
+          "domain": "https://www.nintendo.com/hk/",
+          "country": "",
+          "source": "careers"
+        },
+        "b": {
+          "record_id": "Q137970698-careers",
+          "name": "Nintendo of Taiwan",
+          "domain": "https://www.nintendo.com/tw/",
+          "country": "",
+          "source": "careers"
+        },
+        "relation": "sibling_subsidiaries",
+        "blocked_as_candidate": true,
+        "p_match": 0.5626,
+        "canonical": [
+          "nintendo hong kong",
+          "nintendo of taiwan"
+        ]
+      },
+      {
+        "a": {
+          "record_id": "Q10884665-careers",
+          "name": "Nintendo Hong Kong",
+          "domain": "https://www.nintendo.com/hk/",
+          "country": "",
+          "source": "careers"
+        },
+        "b": {
+          "record_id": "Q137970698-news",
+          "name": "Nintendo Taiwan",
+          "domain": "",
+          "country": "",
+          "source": "news"
+        },
+        "relation": "sibling_subsidiaries",
+        "blocked_as_candidate": true,
+        "p_match": 0.0094,
+        "canonical": [
+          "nintendo hong kong",
+          "nintendo taiwan"
+        ]
+      },
+      {
+        "a": {
+          "record_id": "Q10884665-careers",
+          "name": "Nintendo Hong Kong",
+          "domain": "https://www.nintendo.com/hk/",
+          "country": "",
+          "source": "careers"
+        },
+        "b": {
+          "record_id": "Q20651008-careers",
+          "name": "Nintendo of America",
+          "domain": "http://www.nintendo.com/",
+          "country": "",
+          "source": "careers"
+        },
+        "relation": "sibling_subsidiaries",
+        "blocked_as_candidate": true,
+        "p_match": 0.392,
+        "canonical": [
+          "nintendo hong kong",
+          "nintendo of america"
+        ]
+      },
+      {
+        "a": {
+          "record_id": "Q10884665-careers",
+          "name": "Nintendo Hong Kong",
+          "domain": "https://www.nintendo.com/hk/",
+          "country": "",
+          "source": "careers"
+        },
+        "b": {
+          "record_id": "Q20651008-news",
+          "name": "Nintendo of America, Inc.",
+          "domain": "",
+          "country": "",
+          "source": "news"
+        },
+        "relation": "sibling_subsidiaries",
+        "blocked_as_candidate": true,
+        "p_match": 0.0121,
+        "canonical": [
+          "nintendo hong kong",
+          "nintendo of america"
+        ]
+      },
+      {
+        "a": {
+          "record_id": "Q10884665-news",
+          "name": "Nintendo (Hong Kong)",
+          "domain": "",
+          "country": "",
+          "source": "news"
+        },
+        "b": {
+          "record_id": "Q110493947-careers",
+          "name": "Nintendo of Canada",
+          "domain": "https://www.nintendo.com/en-ca/",
+          "country": "",
+          "source": "careers"
+        },
+        "relation": "sibling_subsidiaries",
+        "blocked_as_candidate": true,
+        "p_match": 0.025,
+        "canonical": [
+          "nintendo hong kong",
+          "nintendo of canada"
+        ]
+      },
+      {
+        "a": {
+          "record_id": "Q10884665-news",
+          "name": "Nintendo (Hong Kong)",
+          "domain": "",
+          "country": "",
+          "source": "news"
+        },
+        "b": {
+          "record_id": "Q137970698-careers",
+          "name": "Nintendo of Taiwan",
+          "domain": "https://www.nintendo.com/tw/",
+          "country": "",
+          "source": "careers"
+        },
+        "relation": "sibling_subsidiaries",
+        "blocked_as_candidate": true,
+        "p_match": 0.0239,
+        "canonical": [
+          "nintendo hong kong",
+          "nintendo of taiwan"
+        ]
+      },
+      {
+        "a": {
+          "record_id": "Q10884665-news",
+          "name": "Nintendo (Hong Kong)",
+          "domain": "",
+          "country": "",
+          "source": "news"
+        },
+        "b": {
+          "record_id": "Q137970698-news",
+          "name": "Nintendo Taiwan",
+          "domain": "",
+          "country": "",
+          "source": "news"
+        },
+        "relation": "sibling_subsidiaries",
+        "blocked_as_candidate": true,
+        "p_match": 0.0094,
+        "canonical": [
+          "nintendo hong kong",
+          "nintendo taiwan"
+        ]
+      },
+      {
+        "a": {
+          "record_id": "Q10884665-news",
+          "name": "Nintendo (Hong Kong)",
+          "domain": "",
+          "country": "",
+          "source": "news"
+        },
+        "b": {
+          "record_id": "Q20651008-careers",
+          "name": "Nintendo of America",
+          "domain": "http://www.nintendo.com/",
+          "country": "",
+          "source": "careers"
+        },
+        "relation": "sibling_subsidiaries",
+        "blocked_as_candidate": true,
+        "p_match": 0.0121,
+        "canonical": [
+          "nintendo hong kong",
+          "nintendo of america"
+        ]
+      },
+      {
+        "a": {
+          "record_id": "Q10884665-news",
+          "name": "Nintendo (Hong Kong)",
+          "domain": "",
+          "country": "",
+          "source": "news"
+        },
+        "b": {
+          "record_id": "Q20651008-news",
+          "name": "Nintendo of America, Inc.",
+          "domain": "",
+          "country": "",
+          "source": "news"
+        },
+        "relation": "sibling_subsidiaries",
+        "blocked_as_candidate": true,
+        "p_match": 0.0121,
+        "canonical": [
+          "nintendo hong kong",
+          "nintendo of america"
+        ]
+      }
+    ]
+  },
+  "timings_s": {
+    "normalise": 0.083,
+    "blocking": 0.024,
+    "scoring": 0.384,
+    "clustering": 0.143,
+    "total": 0.634
+  }
+}

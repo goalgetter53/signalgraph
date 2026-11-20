@@ -3,7 +3,7 @@ VENV ?= .venv
 BIN := $(VENV)/bin
 DEMO_DB ?= demo.duckdb
 
-.PHONY: install lint format typecheck test test-live check train eval bench demo serve docker clean
+.PHONY: install lint format typecheck test test-live check train eval bench real-data real-eval demo serve docker clean
 
 install:  ## create venv and install with dev extras
 	$(PY) -m venv $(VENV)
@@ -37,6 +37,12 @@ eval:  ## evaluate ER on the gold set -> reports/er_eval.json
 
 bench:  ## ER throughput at 10k / 50k synthetic records -> reports/benchmark.json
 	$(BIN)/python scripts/bench_er.py
+
+real-data:  ## re-pull the Wikidata gold set (network; cached in data/real/raw/)
+	$(BIN)/python benchmarks/real/build_wikidata_gold.py
+
+real-eval:  ## ER on the committed REAL Wikidata gold set -> reports/real_eval.{json,md}
+	$(BIN)/python benchmarks/real/run_real_eval.py
 
 demo:  ## offline end-to-end run on recorded fixtures (fictional companies)
 	rm -f $(DEMO_DB)

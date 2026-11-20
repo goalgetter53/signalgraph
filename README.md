@@ -6,7 +6,7 @@ those feeds into one canonical account per company and ranks the accounts with a
 explains itself line by line.
 
 > Python 3.11 · async httpx · DuckDB · FastAPI · numpy · hypothesis · ruff + mypy --strict clean ·
-> 166 tests (164 offline + 2 opt-in live)
+> 169 tests (167 offline + 2 opt-in live)
 
 ---
 
@@ -29,8 +29,9 @@ or domain match. That join has two problems. It misses real matches: typos, rebr
 `Incorporated`, legal names with no website. It also creates false ones: `Northwind Robotics
 GmbH` (the German subsidiary, with its own `.de` domain) is merged into the US parent, the US
 and Indian "Summit Solutions" become one company, and two startups that list their incubator's
-URL get merged with the incubator and with each other. On the gold set below, that naive join reaches
-**F1 0.784**. Every miss is a lost touchpoint, and every false merge sends a rep to the wrong company.
+URL get merged with the incubator and with each other. On 5,044 real company records built from
+Wikidata, that naive join reaches **F1 0.291** (on my hand-made synthetic gold set it reaches 0.784).
+Every miss is a lost touchpoint, and every false merge sends a rep to the wrong company.
 
 ## 2. What I built
 
@@ -38,8 +39,10 @@ URL get merged with the incubator and with each other. On the gold set below, th
    They are async and polite: per-host rate limits, retries with full jitter, `Retry-After`
    support, and a contact User-Agent. Each one normalises into a typed `SignalEvent`.
 2. **An entity-resolution engine** built from canonicalisation, blocking, a learned pair scorer
-   and constrained union-find. It reaches **P 0.974 / R 0.974 / F1 0.974** on a hand-labelled set
-   of 173 tricky records (§4).
+   and constrained union-find. On **real data** (5,044 records of 2,187 Wikidata companies) it
+   reaches **P 0.528 / R 0.322 / F1 0.400** against the naive join's F1 0.291 (§4). That is a clear
+   gain over the baseline, but far below the **F1 0.974** it scores on my 173-record *synthetic*
+   gold set, and the README explains why.
 3. **Explainable scoring.** Each signal type has a weight and an exponential half-life, magnitude
    is log-scaled, and each type has a cap. ICP filters live in YAML. `GET /accounts/{id}/explain`
    returns every term of the score.
@@ -99,7 +102,95 @@ the scoring model.
 | **Scorer** | L2 logistic regression fitted with IRLS in numpy. Fellegi-Sunter is implemented as a baseline and compared | Weights ship as a 1 KB readable JSON file ([`er_model.json`](src/signalgraph/resolution/er_model.json)) |
 | **Clustering** | Union-find over edges, strongest first, with a **cannot-link** constraint: two clusters holding different canonical domains are never merged | Stops chaining through domain-less SEC records |
 
-### Evaluation protocol
+### Results on real data (Wikidata companies)
+
+Measured by `make real-eval` → [`reports/real_eval.json`](reports/real_eval.json) /
+[`reports/real_eval.md`](reports/real_eval.md). The data was pulled from the public Wikidata
+SPARQL endpoint on **2026-11-20** by
+[`benchmarks/real/build_wikidata_gold.py`](benchmarks/real/build_wikidata_gold.py) (`make
+real-data`). Wikidata is **CC0 1.0**, so the derived gold set is committed:
+[`data/real/wikidata_companies_gold.csv`](data/real/wikidata_companies_gold.csv).
+
+- **Ground truth = Wikidata QID.** Each company becomes up to 4 records built from real strings
+  only, with no injected typos: `careers` (English label + official website P856), `registry`
+  (current official name P1448 + country, no website), `news` (one English alias, no website) and
+  `watchlist` (a former official name, i.e. P1448 with an end date). That gives 2,187 careers,
+  1,372 news, 998 registry and 487 watchlist records.
+- **Sampling (hard cases on purpose):** 913 companies that are a parent or subsidiary of another
+  sampled company (P749), 648 rebranded businesses, 513 generic businesses with a website and an
+  official name, and 113 other companies whose English label exactly equals a sampled label.
+  Parents, subsidiaries and same-name companies are separate entities, so they are hard negatives.
+- **Protocol: no fitting and no tuning on this data.** The shipped `er_model.json` (trained on
+  synthetic data only) runs through the production `EntityResolver` at the shipped threshold
+  0.40. Metrics are pairwise over all 12,718,446 record pairs. The CIs come from a percentile
+  bootstrap (1,000 resamples) over the 1,520 connected components of truth ∪ predictions.
+
+| Method @ 0.40, 5,044 records, 4,279 true pairs | Precision | Recall | **F1** | TP / FP / FN | 95% CI (F1) |
+|---|---|---|---|---|---|
+| Baseline: exact normalised name OR same domain | 0.422 | 0.222 | 0.291 | 950 / 1299 / 3329 | 0.263–0.320 |
+| **signalgraph engine (shipped)** | **0.528** | **0.322** | **0.400** | **1378 / 1231 / 2901** | **0.366–0.431** |
+
+- **Paired difference:** engine − baseline F1 has a 95% CI of **+0.095 to +0.124**.
+- **Blocking** proposed 12,847 candidate pairs but kept only **53.1%** of the true pairs. Nearly
+  half of the true pairs share no blocking key: no domain, no rarest name token and no
+  4-character prefix.
+- **The threshold is not the problem.** Picking the threshold on this test set (cheating, for
+  diagnosis only) gives a best F1 of 0.461, at threshold 0.10.
+
+| Sampling slice (pairs within slice) | Records | Entities | Engine P / R / F1 | Baseline P / R / F1 |
+|---|---|---|---|---|
+| generic businesses | 1258 | 513 | 0.973 / 0.400 / 0.567 | 0.985 / 0.270 / 0.424 |
+| rebranded businesses | 2001 | 648 | 0.912 / 0.289 / 0.439 | 0.918 / 0.202 / 0.331 |
+| same-label companies | 183 | 113 | 0.714 / 0.309 / 0.431 | 0.518 / 0.346 / 0.415 |
+| parents & subsidiaries | 1602 | 913 | 0.241 / 0.324 / 0.276 | 0.163 / 0.210 / 0.183 |
+
+For the README's core use case, matching a legal name with no website (`registry`) to a brand
+name with a website (`careers`), engine recall is 0.627 against the baseline's 0.501.
+
+**Honest read.** The engine does **much worse on real data than on my synthetic set** (F1 0.400 vs
+0.974). It still beats the naive join on F1 in every slice, and the paired CI on the gain excludes zero.
+There are three reasons for the drop:
+
+- **Many true pairs have no lexical overlap.** No string matcher can link these without an
+  external alias or ticker table:
+  - rebrands (`CBS RECORDS CANADA LTD.` → `Sony Music Canada`, `Merloni Elettrodomestici` →
+    `Indesit Company`),
+  - tickers and acronyms used as aliases (`BUMI` for `Bumi Resources`, `BOEV` for `Börsenverein
+    des Deutschen Buchhandels`),
+  - multilingual legal names.
+- **The model is too cautious when one name adds words.** `Crown Resorts Limited` vs `Crown
+  Limited` scores 0.288. The likely cause is that my synthetic generator teaches "same brand + different extra word =
+  different company", and real aliases break that rule.
+- **Real subsidiaries often list the parent's domain with a path.** `Microsoft Canada` lists
+  `microsoft.com/en-ca`, and `Nintendo Hong Kong` lists `nintendo.com/hk/`. eTLD+1
+  canonicalisation therefore gives them the same domain, the cannot-link constraint cannot fire,
+  and whole subsidiary families merge. Of the engine's 1,231 false-merge pairs, 525 are sibling
+  subsidiaries and 383 are parent/subsidiary pairs.
+
+The synthetic set mostly modelled typos and suffix noise. It under-represented all three of these
+failure modes, which is why its 0.974 does not transfer.
+
+Process note: the first real run sampled only the subsidiary, rebrand and same-label groups
+(3,718 records). It gave engine F1 0.364 against the baseline's 0.263. I then added the generic
+slice, which was already in the plan ("businesses with an official website"), so the overall
+number is not driven only by hard cases. Each slice is still reported above. Nothing in the
+engine was changed in response to these results.
+
+**Real error examples** (from `reports/real_eval.md`):
+
+- *Miss (rebrand):* `Sony Music Canada` (sonymusic.ca) vs `CBS RECORDS CANADA LTD.`. Never
+  blocked: the only shared word, `canada`, is not a blocking key for either name.
+- *Miss (ticker alias):* `Bumi Resources` vs `BUMI`. Blocked, but p = 0.209.
+- *Miss (extra words):* `Crown Resorts Limited` vs `Crown Limited`. p = 0.288, just under the
+  threshold.
+- *False merge (shared parent domain):* `Microsoft Sweden` (`news.microsoft.com/sv-se/`) with
+  `Microsoft Canada` (`microsoft.com/en-ca`). p = 0.615 on a `domain_match`, and the merge then
+  chains to `Microsoft Morocco`.
+- *False merge (same name, different company):* `Capitalia` (capitalia.it) with `Capitalia SE`.
+  p = 0.930. These are two different Wikidata entities with an identical brand and no domain on
+  one side.
+
+### Evaluation protocol (synthetic gold set)
 
 - **Gold set:** [`data/gold/companies_gold.csv`](data/gold/companies_gold.csv) has
   **173 hand-labelled FICTIONAL records**, 70 entities and 156 true co-referent pairs. Each row
@@ -116,7 +207,7 @@ the scoring model.
 - **Metrics are pairwise over all record pairs.** True pairs that blocking never proposed count as
   false negatives, so blocking recall is part of the reported recall.
 
-### Results (gold set, measured by `make eval` → [`reports/er_eval.json`](reports/er_eval.json))
+### Results on the synthetic gold set (FICTIONAL records, measured by `make eval` → [`reports/er_eval.json`](reports/er_eval.json))
 
 | Method @ threshold 0.40 | Precision | Recall | **F1** | TP / FP / FN |
 |---|---|---|---|---|
@@ -187,6 +278,7 @@ Example from the offline demo (`GET /accounts/{id}/explain`, fictional company, 
 ```bash
 make install         # python3.11 venv + dev extras
 make check           # ruff + mypy --strict + pytest
+make real-eval       # ER on the committed REAL Wikidata gold set -> reports/real_eval.{json,md}
 make demo            # offline: replays recorded fixtures (FICTIONAL companies) end to end
 make serve           # FastAPI on :8000 over the demo DB -> /docs
 ```
@@ -271,6 +363,11 @@ These four are covered by fixture tests only.
 
 ## 9. Limitations and trade-offs
 
+- **Real-data accuracy is modest (F1 0.400 on Wikidata companies, §4).** The main gaps are:
+  - rebrands and ticker aliases with no shared token (they need an alias/ticker source),
+  - subsidiaries that list the parent's domain with a path (they need path- or country-aware
+    domain keys),
+  - over-caution when one name adds words.
 - **Domain cannot-link vs rebrands.** A rebrand whose old *and* new domains both appear stays
   split unless an `f/k/a` alias or a shared domain bridges it. I chose the precision win
   (+0.19 on the gold set) over that recall.
@@ -314,8 +411,10 @@ src/signalgraph/
 config/          scoring.yaml, icp.yaml, watchlist.yaml (live)
 fixtures/        recorded API responses for FICTIONAL companies + manifest + demo watchlist
 data/gold/       hand-labelled ER gold set (FICTIONAL)
+data/real/       REAL gold set derived from Wikidata (CC0) + pull metadata; raw cache gitignored
+benchmarks/real/ build_wikidata_gold.py (pull + build), run_real_eval.py (evaluate)
 scripts/         train_er.py, eval_er.py, bench_er.py
-reports/         er_eval.json, benchmark.json, live_run_2026-11-19.json
+reports/         er_eval.json, real_eval.{json,md}, benchmark.json, live_run_2026-11-19.json
 tests/           unit/ integration/ property/ (hypothesis) live/ (opt-in)
 docs/adr/        0001 DuckDB · 0002 ER design · 0003 scoring model
 ```
@@ -324,6 +423,8 @@ docs/adr/        0001 DuckDB · 0002 ER design · 0003 scoring model
 
 - Every company in `fixtures/` and `data/gold/` is fictional. The synthetic generator is labelled
   as such everywhere it is used.
+- `data/real/` holds real companies, derived from Wikidata (CC0 1.0, pulled 2026-11-20), with
+  QIDs so every label can be checked.
 - Every number in this README comes from a committed report or a run described above. There are
   no customer results, because there are no customers yet.
 

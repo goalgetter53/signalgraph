@@ -29,6 +29,8 @@ jobs:
         run: pytest
       - name: ER quality on gold set
         run: python scripts/eval_er.py
+      - name: ER on real Wikidata gold set (committed CSV, offline)
+        run: python benchmarks/real/run_real_eval.py
       - name: Offline demo
         run: |
           signalgraph --db ci.duckdb ingest --fixtures fixtures --today 2026-11-19

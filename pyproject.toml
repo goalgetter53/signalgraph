@@ -51,7 +51,7 @@ markers = ["live: hits real public APIs (skipped unless SIGNALGRAPH_LIVE=1)"]
 [tool.ruff]
 line-length = 100
 target-version = "py311"
-src = ["src", "tests", "scripts"]
+src = ["src", "tests", "scripts", "benchmarks"]
 
 [tool.ruff.lint]
 select = ["E", "F", "W", "I", "B", "UP", "SIM", "RUF", "N", "C4", "PT"]
@@ -61,7 +61,7 @@ ignore = ["RUF001", "RUF002", "RUF003"]
 python_version = "3.11"
 strict = true
 mypy_path = "src"
-files = ["src/signalgraph", "scripts"]
+files = ["src/signalgraph", "scripts", "benchmarks"]
 plugins = ["pydantic.mypy"]
 
 [[tool.mypy.overrides]]

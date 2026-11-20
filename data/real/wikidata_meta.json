@@ -1,0 +1,31 @@
+{
+  "source": "Wikidata (https://www.wikidata.org), CC0 1.0",
+  "endpoint": "https://query.wikidata.org/sparql",
+  "pulled_utc": "2026-11-20",
+  "seed_counts": {
+    "subsidiary_or_parent": 949,
+    "renamed": 700,
+    "generic": 700,
+    "homonym": 113
+  },
+  "qids_in_pool": 2259,
+  "entities_with_records": 2187,
+  "records": 5044,
+  "records_by_source": {
+    "careers": 2187,
+    "news": 1372,
+    "registry": 998,
+    "watchlist": 487
+  },
+  "entities_by_seed": {
+    "subsidiary_or_parent": 913,
+    "renamed": 648,
+    "generic": 513,
+    "homonym": 113
+  },
+  "queries": {
+    "subsidiaries": "SELECT DISTINCT ?c ?p WHERE {\n  VALUES ?t { wd:Q4830453 wd:Q6881511 wd:Q783794 wd:Q891723 wd:Q658255 wd:Q167037 wd:Q1589009 wd:Q18388277 wd:Q1058914 }\n  ?c wdt:P31 ?t ; wdt:P749 ?p ; wdt:P856 [] .\n  ?p wdt:P856 [] .\n} LIMIT 800",
+    "renamed": "SELECT DISTINCT ?c WHERE {\n  ?st pq:P582 ?e . ?c p:P1448 ?st . ?c wdt:P856 [] . ?c wdt:P31 wd:Q4830453 .\n} LIMIT 700",
+    "generic": "SELECT DISTINCT ?c WHERE {\n  ?c wdt:P31 wd:Q4830453 ; wdt:P856 [] ; wdt:P1448 [] .\n} LIMIT 700"
+  }
+}
